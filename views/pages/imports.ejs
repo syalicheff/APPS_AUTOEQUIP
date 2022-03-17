@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+
+    <head>
+        
+<meta charset="UTF-8">
+<title>INTERFACE MODULES AUTOEQUIP</title>
+
+<!-- CSS (load bootstrap from a CDN) -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/css/bootstrap.min.css">
+<link rel="stylesheet" href="style/style.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="./js/chargement.js"></script>
+
+
+    </head>
+    <header>
+        <%- include('../partials/header'); %>
+    </header>
+  <body>
+    <script async="" id="__bs_script__" src="http://localhost:3000/browser-sync/browser-sync-client.js?v=2.26.3"></script>
+    <br><br>
+    <div class="container">
+      <form action="" method="post" enctype="multipart/form-data">
+        <div class="form-group">
+          <h4>APPLICATION IMPORTS TARIFS</h4>
+        </div>
+          <div class="form-group">
+
+            <span>Type d'import</span><br>
+            <select class="form-control"  name="typeImport">
+              <option>MANUEL</option>
+              <option>TACHE PLANIFIE</option>
+            </select>
+        </div>
+
+          <div class="btn-block form-group center">
+            <button id="ExeButton" class="btn btn-danger" type="submit" onclick="">EXECUTER</button>
+          <img style="display:none" id="imgtourne" src="/snippet/chargement.png" alt="tourne" title="Chargement ..."/>
+
+        </div>
+      </form>
+    </div>
+    <footer>
+      <%- include('../partials/footer'); %>
+    </footer> 
+  </body>
+</html>
