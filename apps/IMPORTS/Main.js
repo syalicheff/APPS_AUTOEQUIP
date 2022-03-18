@@ -10,7 +10,7 @@ var sqlConfig =  require("./database.js");
 
 cron.schedule('0 21 * * 1-5', () => {
     console.log("Lancement de la tâche programmé quotidienne")
-    Main()
+    Main();
 });
 
 cron.schedule('0 23 * * 5', function(){
@@ -21,6 +21,8 @@ console.log("APPLICATION D'IMPORTS LANCE")
 
 async function Main ()
 {
+  await delay(5000)
+  return "Done"
   filenames = fs.readdirSync("Q:/EXPLOITATION/ORLY/8-IMPORT POUR SAGE/IMPORT VIA SQL/A IMPORTER"); 
   for(const file of filenames) 
   {
@@ -31,12 +33,14 @@ async function Main ()
         var tabData = await excelsData.extractData(file)
         var dernierFichier = "OUI"
         var modif = await ImportNet.sqlModifOffi(Object.values(tabData),file,dernierFichier)
+        return modif
       }
       else 
       { 
         var tabData = await excelsData.extractData(file)
         var dernierFichier = "NON"
         var modif = await ImportNet.sqlModifOffi(Object.values(tabData),file,dernierFichier)
+        return modif
       }
     }
     else if(file.includes('PUBLIC'))
@@ -46,12 +50,14 @@ async function Main ()
           var tabData = await excelsData.extractData(file)
           var dernierFichier = "OUI"
           var modif = await ImportPublic.sqlModifOffi(Object.values(tabData),file,dernierFichier)
+          return modif
         }
         else 
         { 
           var tabData = await excelsData.extractData(file)
           var dernierFichier = "NON"
           var modif = await ImportPublic.sqlModifOffi(Object.values(tabData),file,dernierFichier)
+          return modif
         }
     }
   }
@@ -134,3 +140,4 @@ async function fournisseurPrincipal(){
 
 }
 module.exports = {Main}
+const delay = ms => new Promise(res => setTimeout(res, ms));

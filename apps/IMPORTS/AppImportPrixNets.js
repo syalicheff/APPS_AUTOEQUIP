@@ -227,8 +227,8 @@ module.exports.sqlModifOffi= async function (tabData,file,dernierFichier)
       if (err) return console.error(err)
       console.log("Fichier excel déplacé!")
     })
-    await sleep(10000);
     await console.log("FIN PROCESS SQL EN : "+ duration)
+    await delay(5000);
 
     // Petite pause entre deux imports 
     return "Done"

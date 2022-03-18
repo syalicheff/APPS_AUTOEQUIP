@@ -15,6 +15,7 @@ body{
 
 }
 .navbar-brand-perso{
+    color: inherit;
     color : #c31324;
     font-style: italic;
     display: inline-block;
@@ -24,7 +25,13 @@ body{
     font-size: 1.25rem;
     line-height: inherit;
     white-space: nowrap;
+    text-decoration: none;
 }
+a, a:hover, a:focus, a:active {
+    text-decoration: none;
+    color: inherit;
+}
+
 .Textep{
     margin-left: 30px;
 }
@@ -45,17 +52,115 @@ h4{
     font-weight: bold;
     text-decoration: underline;
 }
-
-
-#imgtourne {
-
-    width: 24px;
-    height: 24px;
-    margin-left: 0px;
-    -webkit-animation: spin 1.5s linear infinite;
-    -moz-animation: spin 1.5s linear infinite;
-    animation: spin 1.5s linear infinite;
+    .input_file {
+        width: 0.1px;
+        height: 0.1px;
+        opacity: 0;
+        overflow: hidden;
+        position: absolute;
+        z-index: -1;
     }
-    @-moz-keyframes spin { 100% { -moz-transform: rotate(-360deg); } }
-    @-webkit-keyframes spin { 100% { -webkit-transform: rotate(-360deg); } }
-    @keyframes spin { 100% { -webkit-transform: rotate(-360deg); transform:rotate(-360deg); } }
+    .input_file + label {
+        box-sizing: border-box;
+        border-radius: 10px;
+        cursor: pointer; /* "hand" cursor */
+
+    }
+    .btn{
+        display: block;
+        text-align: center;
+    }
+    .vertical-line{
+        border-left: 2px solid rgb(255, 255, 255);
+        display: inline-block;
+        height: 10px;
+
+      }
+    
+    .input_file:focus + label,
+    .inpu_file + label:hover {
+        background-color: #dc3545;
+        border-color: #dc3545;
+    }
+
+
+
+
+    .dot-pulse {
+        position: relative;
+        left: -9999px;
+        width: 10px;
+        height: 10px;
+        border-radius: 5px;
+        background-color: #d71921;
+        color: #d71921;
+        box-shadow: 9999px 0 0 -5px #d71921;
+        animation: dotPulse 1.5s infinite linear;
+        animation-delay: .25s;
+      }
+      .dot-pulse::before, .dot-pulse::after {
+        content: '';
+        display: inline-block;
+        position: absolute;
+        top: 0;
+        width: 10px;
+        height: 10px;
+        border-radius: 5px;
+        background-color: #d71921;
+        color: #d71921;
+      }
+      
+      .dot-pulse::before {
+        box-shadow: 9984px 0 0 -5px #d71921;
+        animation: dotPulseBefore 1.5s infinite linear;
+        animation-delay: 0s;
+      }
+      
+      .dot-pulse::after {
+        box-shadow: 10014px 0 0 -5px #d71921;
+        animation: dotPulseAfter 1.5s infinite linear;
+        animation-delay: .5s;
+      }
+      
+      @keyframes dotPulseBefore {
+        0% {
+          box-shadow: 9984px 0 0 -5px #d71921;
+        }
+        30% {
+          box-shadow: 9984px 0 0 2px #d71921;
+        }
+        60%,
+        100% {
+          box-shadow: 9984px 0 0 -5px #d71921;
+        }
+      }
+      
+      @keyframes dotPulse {
+        0% {
+          box-shadow: 9999px 0 0 -5px #d71921;
+        }
+        30% {
+          box-shadow: 9999px 0 0 2px #d71921;
+        }
+        60%,
+        100% {
+          box-shadow: 9999px 0 0 -5px #d71921;
+        }
+      }
+      
+      @keyframes dotPulseAfter {
+        0% {
+          box-shadow: 10014px 0 0 -5px #d71921;
+        }
+        30% {
+          box-shadow: 10014px 0 0 2px #d71921;
+        }
+        60%,
+        100% {
+          box-shadow: 10014px 0 0 -5px #d71921;
+        }
+      }
+      .loadBtn{
+          display: flex;
+      }
+      

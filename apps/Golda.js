@@ -182,6 +182,7 @@ module.exports.AutoStoreImportSGDB = async function(file){
     wb  = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, 'test');
     XLSX.writeFile(wb,'Q:/EXPLOITATION/ORLY/SUPPORT/SITE WEB/PARAMETRAGE SITE/GOLDA (TARIF)/TARIF FOURNISSEUR/2022/STE GEN/IMPORT SGDB '+date+'.xlsx');
+    return "Done"
 }
 module.exports.AutoStoreImportBLOIS = async function(file){
 try{

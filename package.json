@@ -4,7 +4,7 @@
   "description": "",
   "main": "server.js",
   "scripts": {
-    "browsersync": "browser-sync start --proxy localhost:8000 --files 'public/style/*.css,views,./*.js,apps'",
+    "browsersync": "browser-sync start --proxy localhost:8000 --files 'public/style,views,./*.js,apps'",
     "nodemon": "nodemon -e js,jade,ejs,css",
     "start_b": "concurrently --kill-others \"npm run nodemon\" \"npm run browsersync\" ",
     "start": " run-p nodemon browsersync"

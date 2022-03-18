@@ -9,6 +9,9 @@
 <!-- CSS (load bootstrap from a CDN) -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/css/bootstrap.min.css">
 <link rel="stylesheet" href="style/style.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="./js/header.js"></script>
+<script src="./js/chargement.js"></script>
 
 
 
@@ -30,17 +33,23 @@
               <option>SGDB</option>
               <option>BLOIS</option>
             </select>
-          <BR>
             <span>Selection du fichier</span><br> 
-          <div class="custom-file">
-            <input type="file"  class="custom-file-input" name="avatar" id="validatedCustomFile"  lang="fr" required>
-            <label class="custom-file-label" for="validatedCustomFile">Choisir un fichier</label>
-            <div class="invalid-feedback">Exemple invalide</div>
+          <div class="file_input btn btn-danger">
+            <input type="file" name="file" id="file" class="input_file" />
+            <img src="snippet/Upload.svg"><label for="file">Choisissez un fichier</label>
           </div>
         </div>
 
-          <div class="btn-block form-group center">
-            <button id="ExeButton" class="btn btn-danger" type="submit" onclick="">EXECUTER</button>
+          <div class="btn-block form-group ">
+            <button id="ExeButton" class="btn btn-danger center" type="submit" onclick="">EXECUTER</button><br>
+            <label style="display: none;" class="chargement">IMPORT EN COURS</label><br>
+            <div style="display: none;" class="snippet chargement" data-title=".dot-pulse">
+              <div class="dot-pulse"></div>
+            </div>
+            <% if (locals.over){  %>
+             <label><%= locals.over %></label>
+             <label> Q:\EXPLOITATION\ORLY\SUPPORT\SITE WEB\PARAMETRAGE SITE\GOLDA (TARIF)\TARIF FOURNISSEUR\2022 </label>
+            <% } %>
           </div>
       </form>
     </div>

@@ -28,7 +28,6 @@ app.get('/imports', (req, res) => {
 
 app.post('/golda', async (req,res) => 
 {
-    var Golda = req.body.taskOption;
 	try 
     {
         if(!req.files) {
@@ -37,22 +36,47 @@ app.post('/golda', async (req,res) =>
                 message: 'No file uploaded'
             });
         } else {
-            //Use the name of the input field (i.e. "avatar") to retrieve the uploaded file
-            let avatar = req.files.avatar;        
-            //Use the mv() method to place the file in upload directory (i.e. "uploads")
-            avatar.mv('./public/uploads/' + avatar.name);
-            await new Promise(resolve => setTimeout(resolve, 5000));
-            //send response
-
-            if(Golda == 'SGDB'){
-                await ImportGolda.AutoStoreImportSGDB("./public/uploads/" + avatar.name)
-            }
-            if (Golda == 'BLOIS'){
-                 var test = await ImportGolda.AutoStoreImportBLOIS("./public/uploads/" + avatar.name)
-                  if(test == "Done"){  
-                    await console.log("FICHIER D'IMPORT CREER")
-                 }
-            }    
+            (async() => 
+            {
+                //Use the name of the input field (i.e. "avatar") to retrieve the uploaded file
+                let avatar = req.files.avatar;        
+                //Use the mv() method to place the file in upload directory (i.e. "uploads")
+                avatar.mv('./public/uploads/' + avatar.name);
+                await new Promise(resolve => setTimeout(resolve, 5000));
+                //send respone
+                if(req.body.taskOption == 'SGDB'){
+                    var over = await ImportGolda.AutoStoreImportSGDB("./public/uploads/" + avatar.name)
+                    if(over == "Done"){  
+                        over = "🎉🎉🎉 FICHIER CREE 🎉🎉🎉"
+                        await res.render('pages/golda',{
+                            over
+                        })
+                    }
+                    else{
+                        over = "😢😢😢 L'IMPORT A ECHOUE 😢😢😢"
+                        await res.render('pages/imports',{
+                            over
+                        })
+                    }
+                        
+                }
+                if (req.body.taskOption == 'BLOIS'){
+                    var over = await ImportGolda.AutoStoreImportBLOIS("./public/uploads/" + avatar.name)
+                    if(over == "Done"){  
+                        over = "🎉🎉🎉 FICHIER CREE 🎉🎉🎉"
+                        await res.render('pages/golda',{
+                            over
+                        })
+                    }
+                    else{
+                        over = "😢😢😢 L'IMPORT A ECHOUE 😢😢😢"
+                        await res.render('pages/imports',{
+                            over
+                        })
+                    }
+                }
+            })();
+    
         }
     } 
     catch (err) {
@@ -60,18 +84,32 @@ app.post('/golda', async (req,res) =>
     }
 
 })
-app.post('/imports', async (req,res) => 
-{
-    var typeImport = req.body.typeImport;
+app.post('/imports', (req,res) => 
+{  
 	try 
     {
-        if(typeImport == 'MANUEL'){
-            console.log("MODE MANUEL")
-            ImportSQL.Main()
-        }
-        if (typeImport == 'TACHE PLANIFIE'){
-            console.log("TACHE PLANIFIER")
-        }
+        (async() => {
+            if(req.body.typeImport == 'MANUEL')
+            {
+                console.log("MODE MANUEL")
+                 var over = await ImportSQL.Main()
+                if (over ==  "Done"){
+                    over = "🎉🎉🎉 IMPORT TERMINE 🎉🎉🎉"
+                    await res.render('pages/imports',{
+                        over
+                    })
+                }
+                else{
+                    over = "😢😢😢 L'IMPORT A ECHOUE 😢😢😢"
+                    await res.render('pages/imports',{
+                        over
+                    })
+                }
+            }
+            if (req.body.typeImport == 'TACHE PLANIFIE'){
+                console.log("TACHE PLANIFIER")
+            }
+        })();
     } 
     catch (err)
     {
@@ -82,4 +120,6 @@ app.post('/imports', async (req,res) =>
 app.listen(port, () => {
     console.log('Server app listening on port ' + port);
 });
+async function main(typeImport,res){
 
+}
