@@ -4,19 +4,21 @@
   "description": "",
   "main": "server.js",
   "scripts": {
-    "browsersync": "browser-sync start --proxy localhost:8000 --files 'public/style,views,./*.js,apps'",
     "nodemon": "nodemon -e js,jade,ejs,css",
-    "start_b": "concurrently --kill-others \"npm run nodemon\" \"npm run browsersync\" ",
-    "start": " run-p nodemon browsersync"
+    "start_b": "concurrently --kill-others \"npm run nodemon\" ",
+    "start": " run-p nodemon "
   },
   "dependencies": {
     "body-parser": "~1.0.1",
     "browser-sync": "^2.27.9",
     "browsersync": "^0.0.1-security",
+    "bs-custom-file-input": "^1.3.4",
+    "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
     "ejs": "^3.1.6",
     "express": "~4.0.0",
     "express-fileupload": "^1.3.1",
+    "express-session": "^1.17.2",
     "fs": "^0.0.1-security",
     "fs-extra": "^10.0.1",
     "lodash": "^4.17.21",

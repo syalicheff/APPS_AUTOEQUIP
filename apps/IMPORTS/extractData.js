@@ -1,6 +1,6 @@
 const XLSX = require('xlsx');
 module.exports.extractData = function(path){
-    var Chemin= "Q:/EXPLOITATION/ORLY/8-IMPORT POUR SAGE/IMPORT VIA SQL/A IMPORTER/" + path
+    var Chemin= "Q:/AUTO EQUIP/SUPPORT/Developpement/IMPORT SAGE SQL/A IMPORTER/" + path
     console.log("Début éxtraction des données du fichier " + path.substring(path.lastIndexOf('/') + 1))
     var tabData = []
     var wb = XLSX.readFile(Chemin);

@@ -24,7 +24,7 @@
     <div class="container">
       <form id="importFrom" action="" method="post" enctype="multipart/form-data">
         <div class="form-group">
-          <h4>APPLICATION IMPORTS TARIFS</h4>
+          <h4>IMPORTS TARIFS</h4>
           
         </div>
           <div class="form-group">
@@ -32,24 +32,25 @@
             <span>Type d'import</span><br>
             <select class="form-control"  name="typeImport">
               <option>MANUEL</option>
+              <option>MANUEL + FOURN PRINC</option>
               <option>TACHE PLANIFIE</option>
             </select>
         </div>
 
         <div class="btn-block form-group center">
-         <button id="ExeButton" class="btn btn-danger" type="submit" onclick="">EXECUTER</button><br>
-         <label style="display: none;" class="chargement">IMPORT EN COURS</label>
-          <div style="display: none;" class="snippet chargement" data-title=".dot-pulse">
-            <div class="dot-pulse"></div>
+          <div id="ExeButton">
+            <button class="btn btn-danger"  type="submit" onclick="">EXECUTER</button><br>
           </div>
+         <div class="flex">        
+            <div style="display: none;" class="snippet chargement" data-title=".dot-pulse">
+              <div class="dot-pulse"></div>
+            </div>
+        </div>
           <% if (locals.over){  %>
            <label><%= locals.over %></label>
           <% } %>
         </div>
-      </form>
-
-
-            
+      </form>     
     </div>
     <footer>
       <%- include('../partials/footer'); %>

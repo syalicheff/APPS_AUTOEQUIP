@@ -194,7 +194,7 @@ module.exports.sqlModifOffi = async function (tabData,file,dernierFichier){
     sql.close() // On ferme la connexion a la BDD)
     if(dernierFichier == "OUI"){
       log=log+"DERNIER FICHIER EN COUR DE LECTURE\n"
-      fournisseurPrincipal();
+     // fournisseurPrincipal();
     // PROCESS DE MISE A JOUR DES FOURNISSEUR PRINCIPAUX 
     }
 

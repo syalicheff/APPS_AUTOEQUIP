@@ -19,11 +19,9 @@ cron.schedule('0 23 * * 5', function(){
 
 console.log("APPLICATION D'IMPORTS LANCE")
 
-async function Main ()
+async function Main (type)
 {
-  await delay(5000)
-  return "Done"
-  filenames = fs.readdirSync("Q:/EXPLOITATION/ORLY/8-IMPORT POUR SAGE/IMPORT VIA SQL/A IMPORTER"); 
+  filenames = fs.readdirSync("Q:/AUTO EQUIP/SUPPORT/Developpement/IMPORT SAGE SQL/A IMPORTER/"); 
   for(const file of filenames) 
   {
     if(file.includes('NET'))
@@ -33,34 +31,30 @@ async function Main ()
         var tabData = await excelsData.extractData(file)
         var dernierFichier = "OUI"
         var modif = await ImportNet.sqlModifOffi(Object.values(tabData),file,dernierFichier)
-        return modif
       }
       else 
       { 
         var tabData = await excelsData.extractData(file)
         var dernierFichier = "NON"
         var modif = await ImportNet.sqlModifOffi(Object.values(tabData),file,dernierFichier)
-        return modif
       }
     }
     else if(file.includes('PUBLIC'))
     {
-        if( filenames.indexOf(file)+1 === filenames.length )
-        {
-          var tabData = await excelsData.extractData(file)
-          var dernierFichier = "OUI"
-          var modif = await ImportPublic.sqlModifOffi(Object.values(tabData),file,dernierFichier)
-          return modif
-        }
-        else 
-        { 
-          var tabData = await excelsData.extractData(file)
-          var dernierFichier = "NON"
-          var modif = await ImportPublic.sqlModifOffi(Object.values(tabData),file,dernierFichier)
-          return modif
-        }
+      if( filenames.indexOf(file)+1 === filenames.length )
+      {
+        var tabData = await excelsData.extractData(file)
+        var dernierFichier = "OUI"
+        var modif = await ImportPublic.sqlModifOffi(Object.values(tabData),file,dernierFichier)
+      }
+      else{ 
+        var tabData = await excelsData.extractData(file)
+        var dernierFichier = "NON"
+        var modif = await ImportPublic.sqlModifOffi(Object.values(tabData),file,dernierFichier)
+      }
     }
   }
+   return "Done"
 }
 
 function dump(obj) {
@@ -114,12 +108,12 @@ async function fournisseurPrincipal(){
 
   console.log("MAJ A 0 ")
 
-  var Princ0 = "update F_ARTFOURNISS SET af_principal = 0 where ar_ref in (SELECT ar_ref FROM f_article WHERE FA_CodeFamille LIKE '%PSA%')"
-  var resPrinc0= await pool.request().query(Princ0)
+  var Princ = "update F_ARTFOURNISS SET af_principal = 0 where ar_ref in (SELECT ar_ref FROM f_article WHERE FA_CodeFamille LIKE '%PSA%')"
+  var resPrinc= await pool.request().query(Princ)
 
   console.log("MAJ PRINCIPAL")
   var fPrincipal = 
-  "MERGE  F_artfourniss as art\n"+
+  "MERGE  F_artfourniss as art\n"+  
   "using 	(SELECT AR_Ref,CT_Num \n"+
     "FROM(\n"+
       "SELECT AR_Ref,CT_Num ,AF_PrixMini, [rnk] = ROW_NUMBER() OVER(PARTITION BY AR_Ref  ORDER BY AF_PrixMini)\n"+
@@ -132,10 +126,11 @@ async function fournisseurPrincipal(){
     "UPDATE set\n"+
       "art.AF_Principal = 1 ;"
    resfPrincipal = await pool.request().query(fPrincipal)
+   
 
   // REQUETE DE VERIFICATION D'IMPORT : select f_artfourniss.ar_ref,ct_num,af_remise,af_prixach,af_principal,AR_PrixVen  from f_artfourniss  inner join f_article on f_article.ar_ref = f_artfourniss.ar_ref where  f_artfourniss.ar_ref in (SELECT ar_ref FROM f_article WHERE FA_CodeFamille LIKE '%PSA%') order by AR_Ref
 
-  console.log("Mise a jour fournisseur principal éfféctué")
+  console.log("Mise a jour fournisseur principal éffectué")
   sql.close() // On ferme la connexion a la BDD
 
 }

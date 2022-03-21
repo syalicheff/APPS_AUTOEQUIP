@@ -10,8 +10,10 @@ body{
     border-radius: 40px;
     box-shadow: 0px 4px 4px rgb(0,0,0,0.25);
     justify-content: center;
-    width: auto;
     width: 425px;
+    height: auto;
+    zoom: 1.75;
+    text-align: center;
 
 }
 .navbar-brand-perso{
@@ -45,122 +47,130 @@ br {
 .center{
     text-align: center;
 }
-h4{
+#importFrom > div:nth-child(1) > h4{
     font-size: 1.5rem;
     font-family: unset;
     color:#d71921;
     font-weight: bold;
-    text-decoration: underline;
+    text-align: center;
+
+
 }
-    .input_file {
-        width: 0.1px;
-        height: 0.1px;
-        opacity: 0;
-        overflow: hidden;
-        position: absolute;
-        z-index: -1;
-    }
-    .input_file + label {
-        box-sizing: border-box;
-        border-radius: 10px;
-        cursor: pointer; /* "hand" cursor */
 
-    }
-    .btn{
-        display: block;
-        text-align: center;
-    }
-    .vertical-line{
-        border-left: 2px solid rgb(255, 255, 255);
-        display: inline-block;
-        height: 10px;
+.input_file {
+  width: 0.1px;
+  height: 0.1px;
+  opacity: 0;
+  overflow: hidden;
+  position: absolute;
+  z-index: -1;
+}
+.input_file + label {
+  box-sizing: border-box;
+  border-radius: 10px;
+  cursor: pointer; /* "hand" cursor */
 
-      }
-    
-    .input_file:focus + label,
-    .inpu_file + label:hover {
-        background-color: #dc3545;
-        border-color: #dc3545;
-    }
+}
+.btn{
+  display: block;
+  text-align: center;
+}
+.vertical-line{
+  border-left: 2px solid rgb(255, 255, 255);
+  display: inline-block;
+  height: 10px;
 
+}
 
+.input_file:focus + label,
+.inpu_file + label:hover {
+  background-color: #dc3545;
+  border-color: #dc3545;
+}
+#ExeButton{
+  display: flex;
+  align-items: stretch;
+  flex-direction: column;  
+  padding-top: 10px;
+}
+.flex{
+  display: flex;
+  justify-content: center;
+}
+.dot-pulse {
+  position: relative;
+  left: -9999px;
+  width: 10px;
+  height: 10px;
+  border-radius: 5px;
+  background-color: #d71921;
+  color: #d71921;
+  box-shadow: 9999px 0 0 -5px #d71921;
+  animation: dotPulse 1.5s infinite linear;
+  animation-delay: .25s;
+}
+.dot-pulse::before, .dot-pulse::after {
+  content: '';
+  display: inline-block;
+  position: absolute;
+  top: 0;
+  width: 10px;
+  height: 10px;
+  border-radius: 5px;
+  background-color: #d71921;
+  color: #d71921;
+}
 
+.dot-pulse::before {
+  box-shadow: 9984px 0 0 -5px #d71921;
+  animation: dotPulseBefore 1.5s infinite linear;
+  animation-delay: 0s;
+}
 
-    .dot-pulse {
-        position: relative;
-        left: -9999px;
-        width: 10px;
-        height: 10px;
-        border-radius: 5px;
-        background-color: #d71921;
-        color: #d71921;
-        box-shadow: 9999px 0 0 -5px #d71921;
-        animation: dotPulse 1.5s infinite linear;
-        animation-delay: .25s;
-      }
-      .dot-pulse::before, .dot-pulse::after {
-        content: '';
-        display: inline-block;
-        position: absolute;
-        top: 0;
-        width: 10px;
-        height: 10px;
-        border-radius: 5px;
-        background-color: #d71921;
-        color: #d71921;
-      }
-      
-      .dot-pulse::before {
-        box-shadow: 9984px 0 0 -5px #d71921;
-        animation: dotPulseBefore 1.5s infinite linear;
-        animation-delay: 0s;
-      }
-      
-      .dot-pulse::after {
-        box-shadow: 10014px 0 0 -5px #d71921;
-        animation: dotPulseAfter 1.5s infinite linear;
-        animation-delay: .5s;
-      }
-      
-      @keyframes dotPulseBefore {
-        0% {
-          box-shadow: 9984px 0 0 -5px #d71921;
-        }
-        30% {
-          box-shadow: 9984px 0 0 2px #d71921;
-        }
-        60%,
-        100% {
-          box-shadow: 9984px 0 0 -5px #d71921;
-        }
-      }
-      
-      @keyframes dotPulse {
-        0% {
-          box-shadow: 9999px 0 0 -5px #d71921;
-        }
-        30% {
-          box-shadow: 9999px 0 0 2px #d71921;
-        }
-        60%,
-        100% {
-          box-shadow: 9999px 0 0 -5px #d71921;
-        }
-      }
-      
-      @keyframes dotPulseAfter {
-        0% {
-          box-shadow: 10014px 0 0 -5px #d71921;
-        }
-        30% {
-          box-shadow: 10014px 0 0 2px #d71921;
-        }
-        60%,
-        100% {
-          box-shadow: 10014px 0 0 -5px #d71921;
-        }
-      }
-      .loadBtn{
-          display: flex;
-      }
-      
+.dot-pulse::after {
+  box-shadow: 10014px 0 0 -5px #d71921;
+  animation: dotPulseAfter 1.5s infinite linear;
+  animation-delay: .5s;
+}
+
+@keyframes dotPulseBefore {
+  0% {
+    box-shadow: 9984px 0 0 -5px #d71921;
+  }
+  30% {
+    box-shadow: 9984px 0 0 2px #d71921;
+  }
+  60%,
+  100% {
+    box-shadow: 9984px 0 0 -5px #d71921;
+  }
+}
+
+@keyframes dotPulse {
+  0% {
+    box-shadow: 9999px 0 0 -5px #d71921;
+  }
+  30% {
+    box-shadow: 9999px 0 0 2px #d71921;
+  }
+  60%,
+  100% {
+    box-shadow: 9999px 0 0 -5px #d71921;
+  }
+}
+
+@keyframes dotPulseAfter {
+  0% {
+    box-shadow: 10014px 0 0 -5px #d71921;
+  }
+  30% {
+    box-shadow: 10014px 0 0 2px #d71921;
+  }
+  60%,
+  100% {
+    box-shadow: 10014px 0 0 -5px #d71921;
+  }
+}
+.loadBtn{
+    display: flex;
+}

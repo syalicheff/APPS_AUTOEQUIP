@@ -5,7 +5,7 @@ module.exports.AutoStoreImportSGDB = async function(file){
     //On créer un objet XLSX
     //On lis notre fichier excel
     var wb = XLSX.readFile(file);
-    const wb2 = XLSX.readFile('Q:/EXPLOITATION/ORLY/SUPPORT/SITE WEB/PARAMETRAGE SITE/TECCOM/MARQUE TECCOM POUR IMPORT ARTICLE PAR FRS.xlsx');
+    const wb2 = XLSX.readFile('Q:/EXPLOITATION/ORLY/SUPPORT/SITE WEB/PARAMETRAGE SITE/TECCOM/MARQUE TECCOM POUR IMPORT ARTICLE PAR FRS.xlsx'); // A VOIR
     // On récupère le nom de la feuille Excel
     const sheetName = wb.SheetNames[0];
     const sheetName2 = wb2.SheetNames[1];
