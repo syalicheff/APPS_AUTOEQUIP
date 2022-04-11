@@ -148,6 +148,7 @@ module.exports.sqlModifOffi = async function (tabData,file,dernierFichier){
       "Art.[AR_CodeFiscal] = isNull(Imp.[AR_CodeFiscal],Art.[AR_CodeFiscal]),\n"+
       "Art.[AR_Contremarque] = isNull(Imp.[AR_Contremarque],Art.[AR_Contremarque]),\n"+
       "Art.[AR_Publie] = isNull(Imp.[AR_Publie],Art.[AR_Publie]),\n"+
+      "Art.[Type Tarif] = Imp.[Type Tarif],\n"+
       "Art.[AR_UnitePoids] = isNull(Imp.[AR_UnitePoids],Art.[AR_UnitePoids]);\n";
 
       let resMajsArticles = await pool.request().query(MajsArticles)
@@ -204,14 +205,14 @@ module.exports.sqlModifOffi = async function (tabData,file,dernierFichier){
       var duration = (post_query - pre_query) / 1000;
       log=log+"FIN PROCESS SQL EN : "+ duration
 
-      await fs.writeFile("Q:/EXPLOITATION/ORLY/8-IMPORT POUR SAGE/IMPORT VIA SQL/LOGS/"+file.slice(0, -5)+".txt",log+"\n",() => {
+      await fs.writeFile("Q:/AUTO EQUIP/SUPPORT/Developpement/IMPORT SAGE SQL/LOGS/"+file.slice(0, -5)+".txt",log+"\n",() => {
         console.log("Fichier Logs Crée");  
         });
-      await fsextra.move('C:/DATA/DOSSIER_FTP/testSQL/Import SAGE.txt','Q:/EXPLOITATION/ORLY/8-IMPORT POUR SAGE/IMPORT VIA SQL/FICHIER IMPORT TXT/'+file.slice(0, -5)+'.txt', function (err) {
+      await fsextra.move('C:/DATA/DOSSIER_FTP/testSQL/Import SAGE.txt','Q:/AUTO EQUIP/SUPPORT/Developpement/IMPORT SAGE SQL/FICHIER IMPORT TXT/'+file.slice(0, -5)+'.txt', function (err) {
         if (err) return console.error(err)
         console.log("Fichier Import déplacé !")
       })
-      await fsextra.move('Q:/EXPLOITATION/ORLY/8-IMPORT POUR SAGE/IMPORT VIA SQL/A IMPORTER/'+file,'Q:/EXPLOITATION/ORLY/8-IMPORT POUR SAGE/IMPORT VIA SQL/FAIT/'+file, function (err) {
+      await fsextra.move('Q:/AUTO EQUIP/SUPPORT/Developpement/IMPORT SAGE SQL/A IMPORTER/'+file,'Q:/AUTO EQUIP/SUPPORT/Developpement/IMPORT SAGE SQL/FAIT/'+file, function (err) {
         if (err) return console.error(err)
         console.log("Fichier excel déplacé!")
       })

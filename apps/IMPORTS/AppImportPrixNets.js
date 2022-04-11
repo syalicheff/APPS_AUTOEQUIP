@@ -151,12 +151,15 @@ module.exports.sqlModifOffi= async function (tabData,file,dernierFichier)
 			  "Art.[AR_Contremarque] = isNull(Imp.[AR_Contremarque],Art.[AR_Contremarque]),\n"+
 			  "Art.[AR_Publie] = isNull(Imp.[AR_Publie],Art.[AR_Publie]),\n"+
 			  "Art.[AR_UnitePoids] = isNull(Imp.[AR_UnitePoids],Art.[AR_UnitePoids]),\n"+
-			  "Art.[Type Tarif] = case when Art.[AR_PrixVen] = 0 and  Art.[AR_PrixAch] = 0  OR Art.[AR_PrixVen] IS NULL then Imp.[Type Tarif] end,\n"+
+			  "Art.[Type Tarif] = case when Art.[AR_PrixVen] = 0 and Art.[AR_PrixAch] = 0 OR Art.[AR_PrixVen] IS NULL then Imp.[Type Tarif] end,\n"+
 			  "Art.[AR_PrixVen] = \n"+	  
 			  "case \n"+
-				"when Art.[AR_PrixVen] = 0 OR Art.[AR_PrixVen] IS NULL then Imp.[AR_PrixVen]\n"+
+				"when Art.[AR_PrixVen] = 0 OR Art.[AR_PrixVen] IS NULL then Imp.[AR_PrixVen] else Art.[AR_PrixVen]\n"+
 			  "end,\n"+
-			  "Art.[AR_PrixAch] = case when Art.[AR_PrixAch] = 0 OR Art.[AR_PrixAch]  IS NULL then Imp.[AR_PrixAch] end ;\n"
+			  "Art.[AR_PrixAch] = \n"+
+			  "case \n"+
+				"when Art.[AR_PrixAch] = 0 OR Art.[AR_PrixAch] IS NULL then Imp.[AR_PrixAch] else Art.[AR_PrixAch]\n"+
+			  "end;"
       let resMajsArticles = await pool.request().query(MajsArticles)
       console.log(resMajsArticles)
     }
@@ -187,12 +190,15 @@ module.exports.sqlModifOffi= async function (tabData,file,dernierFichier)
 			  "Art.[AR_Contremarque] = isNull(Imp.[AR_Contremarque],Art.[AR_Contremarque]),\n"+
 			  "Art.[AR_Publie] = isNull(Imp.[AR_Publie],Art.[AR_Publie]),\n"+
 			  "Art.[AR_UnitePoids] = isNull(Imp.[AR_UnitePoids],Art.[AR_UnitePoids]),\n"+
-			  "Art.[Type Tarif] = case when Art.[AR_PrixVen] = 0 and  Art.[AR_PrixAch] = 0  OR Art.[AR_PrixVen] IS NULL then Imp.[Type Tarif] end,\n"+
+			  "Art.[Type Tarif] = case when Art.[AR_PrixVen] = 0 and Art.[AR_PrixAch] = 0 OR Art.[AR_PrixVen] IS NULL then Imp.[Type Tarif] end,\n"+
 			  "Art.[AR_PrixVen] = \n"+	  
 			  "case \n"+
-				"when Art.[AR_PrixVen] = 0 OR Art.[AR_PrixVen] IS NULL then Imp.[AR_PrixVen]\n"+
+				"when Art.[AR_PrixVen] = 0 OR Art.[AR_PrixVen] IS NULL then Imp.[AR_PrixVen] else Art.[AR_PrixVen]\n"+
 			  "end,\n"+
-			  "Art.[AR_PrixAch] = case when Art.[AR_PrixAch] = 0 OR Art.[AR_PrixAch]  IS NULL then Imp.[AR_PrixAch] end ;\n"
+			  "Art.[AR_PrixAch] = \n"+
+			  "case \n"+
+				"when Art.[AR_PrixAch] = 0 OR Art.[AR_PrixAch] IS NULL then Imp.[AR_PrixAch] else Art.[AR_PrixAch]\n"+
+			  "end;"
 
       let resMajsArticles = await pool.request().query(MajsArticles)
       console.log(resMajsArticles)
@@ -200,7 +206,7 @@ module.exports.sqlModifOffi= async function (tabData,file,dernierFichier)
     //ON VIDE ENSUITE NOTRE TABLE TAMPON
     log=log+"SUPPRESSION DES DONNES TABLE IMPORT\n"
     console.log("SUPPRESSION DES DONNES TABLE IMPORT")
-    var deleteTampon = await pool.request().query("DELETE FROM [AUTO_EQUIP].[dbo].[F_IMPORT]")
+    //var deleteTampon = await pool.request().query("DELETE FROM [AUTO_EQUIP].[dbo].[F_IMPORT]")
     sql.close() // On ferme la connexion a la BDD
     var post_query = new Date().getTime();
     // calculate the duration in seconds
@@ -219,11 +225,11 @@ module.exports.sqlModifOffi= async function (tabData,file,dernierFichier)
       console.log("Fichier Logs Crée");  
       });
 
-    await fsextra.move('C:/DATA/DOSSIER_FTP/testSQL/Import SAGE.txt','Q:/EXPLOITATION/ORLY/8-IMPORT POUR SAGE/IMPORT VIA SQL/FICHIER IMPORT TXT/'+file.slice(0, -5)+'.txt', function (err) {
+    await fsextra.move('C:/DATA/DOSSIER_FTP/testSQL/Import SAGE.txt','Q:/AUTO EQUIP/SUPPORT/Developpement/IMPORT SAGE SQL/FICHIER IMPORT TXT/'+file.slice(0, -5)+'.txt', function (err) {
       if (err) return console.error(err)
       console.log("Fichier Import déplacé !")
     })
-    await fsextra.move('Q:/EXPLOITATION/ORLY/8-IMPORT POUR SAGE/IMPORT VIA SQL/A IMPORTER/'+file,'Q:/EXPLOITATION/ORLY/8-IMPORT POUR SAGE/IMPORT VIA SQL/FAIT/'+file, function (err) {
+    await fsextra.move('Q:/AUTO EQUIP/SUPPORT/Developpement/IMPORT SAGE SQL/A IMPORTER/'+file,'Q:/AUTO EQUIP/SUPPORT/Developpement/IMPORT SAGE SQL/FAIT/'+file, function (err) {
       if (err) return console.error(err)
       console.log("Fichier excel déplacé!")
     })
@@ -236,9 +242,11 @@ module.exports.sqlModifOffi= async function (tabData,file,dernierFichier)
   catch(err){
     log = log + err; 
     console.log("Erreur dans le traitement")
-    await fs.writeFile("Q:/EXPLOITATION/ORLY/8-IMPORT POUR SAGE/IMPORT VIA SQL/LOGS/"+file.slice(0, -5)+".txt",log+"\n",() => {
+    console.log(err)
+    await fs.writeFile("Q:/AUTO EQUIP/SUPPORT/Developpement/IMPORT SAGE SQL/LOGS/"+file.slice(0, -5)+".txt",log+"\n",() => {
       console.log("Fichier Logs Crée");  
     });
+    await sleep(5000);
   }
 }
 async function majPubliee(){

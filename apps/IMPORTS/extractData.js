@@ -43,16 +43,24 @@ module.exports.extractData = function(path){
                 CODEDOUANE: json[i]["CODE DOUANE"]  ,
                 SUPARTICLE : json[i]["SUPP ART FOURNISSEUR"]
              }
-             if (tabData[i].DESIGNATIONS) {
-                 //console.log(tabData[i].DESIGNATIONS)
-                tabData[i].REF = tabData[i].REF.replace(/\t/g,'').replace('-','').replace(/\s/g,'').replace(/[&\/\\#,+(-)$~%.'"Ø|:;=#*?<>{},]/g,'')
+            if(typeof tabData[i].PRIXVENTE !=="undefined" ){
+                if(typeof tabData[i].PRIXVENTE == "string"){tabData[i].PRIXVENTE=parseFloat(tabData[i].PRIXVENTE.replace(",","."))}
+            }
+            if(typeof tabData[i].PRIXACHAT !=="undefined"){
+                if(typeof tabData[i].PRIXACHAT == "string"){tabData[i].PRIXACHAT=parseFloat(tabData[i].PRIXACHAT.replace(",","."))}
+            }
+            if(typeof tabData[i].PRIXFOURNISS !=="undefined"){
+                if(typeof tabData[i].PRIXFOURNISS == "string"){tabData[i].PRIXFOURNISS=parseFloat(tabData[i].PRIXFOURNISS.replace(",","."))}
+            }
+            if(typeof tabData[i].DESIGNATIONS !=="undefined"){
                 tabData[i].DESIGNATIONS = tabData[i].DESIGNATIONS.slice(0,64).replace(/\t/g,'').normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/,/g,'').replace('-','').replace("Rétroviseur","boitier").replace("rétroviseur","boitier").replace("Retroviseur","boitier").replace("retroviseur","boitier").replace("Rétro","boitier").replace("rétro","boitier").trim()
-             }     
-
-
-            
+            }
+            if (typeof tabData[i].REF !=="undefined") {
+                tabData[i].REF = tabData[i].REF.replace(/\t/g,'').replace('-','').replace(/\s/g,'').replace(/[&\/\\#,+(-)$~%.'"Ø|:;=#*?<>{},]/g,'')
+            }
         }
     }
+    console.log(tabData)
     return tabData    
 }   
 function FilterDatas(value,valDef){

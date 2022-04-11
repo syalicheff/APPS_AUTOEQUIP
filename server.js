@@ -5,6 +5,8 @@ const ImportGolda = require('./apps/Golda.js')
 const bodyParser = require("body-parser");
 const ImportSQL = require('./apps/IMPORTS/main.js')
 const session = require('express-session')
+const AppMagasin = require('./apps/MAGASIN/AppMagasin.js')
+
 
 
 
@@ -34,6 +36,15 @@ app.get('/golda', (req, res) => {
 app.get('/imports', (req, res) => {
 
     res.render('pages/imports');
+});
+app.get('/magasin',  async (req, res) => {
+        AppMagasin.RequiredDatas().then(Data =>{
+
+            res.render('pages/magasin',
+            {
+                datas: Object.values(Data)
+            });
+        })
 });
 
 app.post('/golda', async (req,res) => 
@@ -128,10 +139,28 @@ app.post('/imports', (req,res) =>
         res.status(500).send(err);
     }
 })
+app.post('/magasin', (req,res) =>{
 
+
+
+})
 app.listen(port, () => {
     console.log('Server app listening on port ' + port);
 });
 
 
 const delay = ms => new Promise(res => setTimeout(res, ms));
+function dump(obj) {
+    var out = '';
+    for (var i in obj) {
+        out += i + ": " + obj[i] + "\n";
+    }
+  
+    alert(out);
+  
+    // or, if you wanted to avoid alerts...
+  
+    var pre = document.createElement('pre');
+    pre.innerHTML = out;
+    document.body.appendChild(pre)
+}

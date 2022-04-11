@@ -8,9 +8,10 @@ const sql = require("mssql")
 var sqlConfig =  require("./database.js");
 
 
-cron.schedule('0 21 * * 1-5', () => {
+cron.schedule('26 21 * * 1-5', () => {
     console.log("Lancement de la tâche programmé quotidienne")
     Main();
+    fournisseurPrincipal()
 });
 
 cron.schedule('0 23 * * 5', function(){
