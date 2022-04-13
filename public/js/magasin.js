@@ -22,13 +22,19 @@ $(document).ready(function() {
     $('button#resetQTE').click(function() {
         $('td.number > input[type=number]').val("0");
     });
-      $("#XMC > td").click(function() {
-        var click = $(this).text().trim();
-        $("#XMC > td").text().forEach(element => {
-            console.log(element)
-        });
-        
-      });
-
-} );
+    $("#XMC > td").click(function() {
+        $("#XMC > td").each(function(){$(this).parents().removeClass('selected')})
+        $(this).parents().addClass('selected')
+        filters($(this).text().trim());
+    })
+    function filters(clicked){
+        console.log(clicked)
+        $("#DataTables_Table_6 > tbody > tr > td:nth-child(2)").each(function(){
+            $(this).parent().attr("hidden",true)
+            if($(this).text().trim() == clicked){
+                $(this).parent().attr("hidden",false)
+            }
+        })
+    }
+});
 

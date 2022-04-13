@@ -20,6 +20,10 @@
         color: #fff;
         z-index: 2;
       }
+      .selected{
+        background: black;
+
+      }
       .testbox {
         display: flex;
         justify-content: center;

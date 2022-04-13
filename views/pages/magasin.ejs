@@ -94,12 +94,12 @@
         </thead>
         <tbody>
           <% for(var i=1; i<locals.datas[7].length; i++){ %>
-            <tr>
+            <tr hidden>
               <% Object.keys(locals.datas[7][i]).forEach(function(element){ %>
                 <% if (element == 'QTE RECUE'){ %>
-                  <td class="number" hidden><input type="number" min="0" max="1000" value ="<%= locals.datas[7][i][element] %>"> </td>
+                  <td class="number" ><input type="number" min="0" max="1000" value ="<%= locals.datas[7][i][element] %>"> </td>
                 <% }else{ %>
-                  <td class="" hidden><%= locals.datas[7][i][element] %></td>
+                  <td class="" ><%= locals.datas[7][i][element] %></td>
                 <% } %>
               <% }) %>
             </tr> 
