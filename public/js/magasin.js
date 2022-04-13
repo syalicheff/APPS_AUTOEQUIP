@@ -1,5 +1,5 @@
 $(document).ready(function() {
-    $('table.display').DataTable( {
+    $('table.display').DataTable({
         "scrollY":        "400px",
         "scrollCollapse": true,
         "paging":         false,
@@ -19,10 +19,16 @@ $(document).ready(function() {
             url: 'https://cdn.datatables.net/plug-ins/1.11.5/i18n/fr-FR.json'
         }
     });
-
-
     $('button#resetQTE').click(function() {
         $('td.number > input[type=number]').val("0");
     });
+      $("#XMC > td").click(function() {
+        var click = $(this).text().trim();
+        $("#XMC > td").text().forEach(element => {
+            console.log(element)
+        });
+        
+      });
+
 } );
 

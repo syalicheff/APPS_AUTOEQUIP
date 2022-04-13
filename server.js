@@ -39,14 +39,12 @@ app.get('/imports', (req, res) => {
 });
 app.get('/magasin',  async (req, res) => {
         AppMagasin.RequiredDatas().then(Data =>{
-
             res.render('pages/magasin',
             {
-                datas: Object.values(Data)
+                datas: Object.values(Data),
             });
         })
 });
-
 app.post('/golda', async (req,res) => 
 {
 	try 
@@ -113,8 +111,14 @@ app.post('/imports', (req,res) =>
         (async() => {
             if(req.body.typeImport == 'MANUEL')
             {
+                var principal = ["Sans"]
+                if (req.body.principal)
+                {
+                    principal = req.body.principal
+                }
+                console.log(principal)
                 console.log("MODE MANUEL")
-                 var over = await ImportSQL.Main()
+                var over = await ImportSQL.Main(principal)
                 if (over ==  "Done"){
                     over = "🎉🎉🎉 IMPORT TERMINE 🎉🎉🎉"
                     await res.render('pages/imports',{
@@ -140,7 +144,7 @@ app.post('/imports', (req,res) =>
     }
 })
 app.post('/magasin', (req,res) =>{
-
+    
 
 
 })

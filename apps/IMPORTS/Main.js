@@ -8,19 +8,18 @@ const sql = require("mssql")
 var sqlConfig =  require("./database.js");
 
 
-cron.schedule('26 21 * * 1-5', () => {
+cron.schedule('30 21 * * 1-5', () => {
     console.log("Lancement de la tâche programmé quotidienne")
     Main();
-    fournisseurPrincipal()
 });
 
 cron.schedule('0 23 * * 5', function(){
-    ImportNet.majPubliee() 
+   majPubliee()
 });
 
 console.log("APPLICATION D'IMPORTS LANCE")
 
-async function Main (type)
+async function Main (principal)
 {
   filenames = fs.readdirSync("Q:/AUTO EQUIP/SUPPORT/Developpement/IMPORT SAGE SQL/A IMPORTER/"); 
   for(const file of filenames) 
@@ -54,7 +53,16 @@ async function Main (type)
         var modif = await ImportPublic.sqlModifOffi(Object.values(tabData),file,dernierFichier)
       }
     }
+    if(principal !== 'Sans'){
+      if(principal.length >1){
+        fournisseurPrincipal("deux")
+      }
+      else{
+        fournisseurPrincipal(principal)
+      }
+    }
   }
+
    return "Done"
 }
 
@@ -69,7 +77,7 @@ function dump(obj) {
     pre.innerHTML = out;
     document.body.appendChild(pre)
 }
-async function fournisseurPrincipal(){
+async function fournisseurPrincipal(type){
   const sqlProperties = sqlConfig.dbConfig() // On récupère notre configuration SQL 
   let pool = await sql.connect(sqlProperties) // Connexion à la BDD SQL Server
 
@@ -78,7 +86,16 @@ async function fournisseurPrincipal(){
   var ResClean = await pool.request().query(Clean)
   
   console.log("INSERTION TABLE TAMPON")
-  var InsertFPrinc = "INSERT INTO [AUTO_EQUIP].[dbo].[F_PRINCIPAL] (AR_Ref,CT_Num,AF_PrixAch,AF_Remise) SELECT [F_ARTFOURNISS].AR_Ref,[F_ARTFOURNISS].CT_Num,[F_ARTFOURNISS].AF_PrixAch,[F_ARTFOURNISS].AF_Remise FROM [F_ARTFOURNISS] WHERE AR_Ref in (SELECT ar_ref from f_article where FA_CodeFamille LIKE '%PSA%')"
+  var fournMaj = ""
+  if(type == deux){
+    fournMaj = "FA_CodeFamille LIKE '%REDA%' or FA_CodeFamille LIKE '%PSA%'"
+  }
+  else{
+    fournMaj = "FA_CodeFamille LIKE '%"+type+"%'"
+  }
+
+  var InsertFPrinc = "INSERT INTO [AUTO_EQUIP].[dbo].[F_PRINCIPAL] (AR_Ref,CT_Num,AF_PrixAch,AF_Remise) SELECT [F_ARTFOURNISS].AR_Ref,[F_ARTFOURNISS].CT_Num,[F_ARTFOURNISS].AF_PrixAch,[F_ARTFOURNISS].AF_Remise FROM [F_ARTFOURNISS] WHERE AR_Ref in (SELECT ar_ref from f_article where "+fournMaj+"')"
+  console.log("InsertFPrinc")
   var resInsertFPrinc = await pool.request().query(InsertFPrinc)
   
   console.log("INSERTION PRIX VENTE")
@@ -109,7 +126,7 @@ async function fournisseurPrincipal(){
 
   console.log("MAJ A 0 ")
 
-  var Princ = "update F_ARTFOURNISS SET af_principal = 0 where ar_ref in (SELECT ar_ref FROM f_article WHERE FA_CodeFamille LIKE '%PSA%')"
+  var Princ = "update F_ARTFOURNISS SET af_principal = 0 where ar_ref in (SELECT ar_ref FROM f_article WHERE "+fournMaj+")"
   var resPrinc= await pool.request().query(Princ)
 
   console.log("MAJ PRINCIPAL")
@@ -133,6 +150,12 @@ async function fournisseurPrincipal(){
 
   console.log("Mise a jour fournisseur principal éffectué")
   sql.close() // On ferme la connexion a la BDD
+
+}
+async function majPubliee(){
+  const sqlProperties = sqlConfig.dbConfig() // On récupère notre configuration SQL 
+  let pool = await sql.connect(sqlProperties) // Connexion à la BDD SQL Server
+  let MajPubliee = await pool.request().query("UPDATE F_ARTICLE SET AR_Publie = 0 WHERE AR_REF NOT IN (SELECT DISTINCT AR_REF FROM F_ARTFOURNISS)")
 
 }
 module.exports = {Main}

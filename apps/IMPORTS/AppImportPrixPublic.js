@@ -107,7 +107,7 @@ module.exports.sqlModifOffi = async function (tabData,file,dernierFichier){
         console.log("NON")
         var SuppressionArticlesFournisseur = "DELETE FROM [dbo].[F_ARTFOURNISS] WHERE [CT_Num]="+"'"+ tabData[0].FOURNISSEUR+"' AND [AR_Ref] IN (SELECT [F_ARTICLE].[AR_Ref] FROM [F_ARTICLE] INNER JOIN [F_IMPORT] on [F_IMPORT].[MARQUE] = [F_ARTICLE].[MARQUE]   WHERE [dbo].[F_ARTICLE].[MARQUE] = [dbo].[F_IMPORT].[MARQUE])"
         //console.log(SuppressionArticlesFournisseur)
-        let resSuppressionArticlesFournisseur = await pool.request().query(SuppressionArticlesFournisseur)
+        //let resSuppressionArticlesFournisseur = await pool.request().query(SuppressionArticlesFournisseur)
       }
     //Puis on importe nos données FOUNISSEUR
     log=log+"INSERTION DONNEES FOURNISSEUR\n"
@@ -193,12 +193,7 @@ module.exports.sqlModifOffi = async function (tabData,file,dernierFichier){
     console.log("SUPPRESSION DES DONNES TABLE IMPORT")
     var deleteTampon = await pool.request().query("DELETE FROM [AUTO_EQUIP].[dbo].[F_IMPORT]")
     sql.close() // On ferme la connexion a la BDD)
-    if(dernierFichier == "OUI"){
-      log=log+"DERNIER FICHIER EN COUR DE LECTURE\n"
-     // fournisseurPrincipal();
-    // PROCESS DE MISE A JOUR DES FOURNISSEUR PRINCIPAUX 
-    }
-
+    
     // On ferme la connexion
     var post_query = new Date().getTime();
     // calculate the duration in seconds
@@ -223,78 +218,6 @@ module.exports.sqlModifOffi = async function (tabData,file,dernierFichier){
   catch(err){
     console.log(err)
   }
-}
-async function majPubliee(){
-  const sqlProperties = sqlConfig.dbConfig() // On récupère notre configuration SQL 
-  let pool = await sql.connect(sqlProperties) // Connexion à la BDD SQL Server
-  let MajPubliee = await pool.request().query("UPDATE F_ARTICLE SET AR_Publie = 0 WHERE AR_REF NOT IN (SELECT DISTINCT AR_REF FROM F_ARTFOURNISS)")
-}
-async function fournisseurPrincipal(){
-  const sqlProperties = sqlConfig.dbConfig() // On récupère notre configuration SQL 
-  let pool = await sql.connect(sqlProperties) // Connexion à la BDD SQL Server
-
-  console.log("SUPPRESSION TABLE TAMPON")
-  var Clean = "delete from f_principal"
-  var ResClean = await pool.request().query(Clean)
-  
-  console.log("INSERTION TABLE TAMPON")
-  var InsertFPrinc = "INSERT INTO [AUTO_EQUIP].[dbo].[F_PRINCIPAL] (AR_Ref,CT_Num,AF_PrixAch,AF_Remise) SELECT [F_ARTFOURNISS].AR_Ref,[F_ARTFOURNISS].CT_Num,[F_ARTFOURNISS].AF_PrixAch,[F_ARTFOURNISS].AF_Remise FROM [F_ARTFOURNISS] WHERE AR_Ref in (SELECT ar_ref from f_article where FA_CodeFamille LIKE '%PSA%')"
-  var resInsertFPrinc = await pool.request().query(InsertFPrinc)
-  
-
-
-  console.log("INSERTION PRIX VENTE")
-  var insertPrixVen = 
-  "MERGE f_principal as princ\n"+
-  "using F_article as art\n"+
-  "ON ART.AR_ref = princ.ar_ref\n"+
-  "when matched then\n"+
-  "update set \n"+
-    "princ.ar_prixven = art.ar_prixven ;"
-  var resinsertPrixVen = await pool.request().query(insertPrixVen)
-
-
-  console.log("MAJ RFA")
-
-  var RFA = "UPDATE F_PRINCIPAL SET \n"+
-  "F_RFA = CT_Taux04 FROM  F_PRINCIPAL \n"+
-  "INNER JOIN F_COMPTET on F_PRINCIPAL.CT_Num = F_COMPTET.CT_Num"
-  var resRFA = await pool.request().query(RFA)
-
-  console.log("CALCUL PRIX MINI")
-  var prixMini = 
-    "update F_PRINCIPAL set \n"+
-    "AF_PrixMini =  (case when AF_PrixAch = 0 OR af_prixach is null \n"+
-    "then (ar_prixven * ( 100 - af_remise ) / 100 ) * ( 100 - F_RFA ) /100 \n"+
-    "else AF_PrixAch * ( 100 - F_RFA ) /100 end) "
-  var resprixMini = await pool.request().query(prixMini)
-
-  console.log("MAJ A 0 ")
-
-  var Princ0 = "update F_ARTFOURNISS SET af_principal = 0 where ar_ref in (SELECT ar_ref FROM f_article WHERE FA_CodeFamille LIKE '%PSA%')"
-  var resPrinc0= await pool.request().query(Princ0)
-
-  console.log("MAJ PRINCIPAL")
-  var fPrincipal = 
-  "MERGE  F_artfourniss as art\n"+
-  "using 	(SELECT AR_Ref,CT_Num \n"+
-    "FROM(\n"+
-      "SELECT AR_Ref,CT_Num ,AF_PrixMini, [rnk] = ROW_NUMBER() OVER(PARTITION BY AR_Ref  ORDER BY AF_PrixMini)\n"+
-      "FROM F_Principal\n"+
-    ") AS a\n"+
-    "WHERE [rnk] = 1 ) as princ\n"+
-  "ON	art.AR_ref = princ.ar_ref\n"+
-  "AND art.CT_NUM = princ.CT_num\n"+
-  "when matched then\n"+
-    "UPDATE set\n"+
-      "art.AF_Principal = 1 ;"
-   resfPrincipal = await pool.request().query(fPrincipal)
-
-  // REQUETE DE VERIFICATION D'IMPORT : select f_artfourniss.ar_ref,ct_num,af_remise,af_prixach,af_principal,AR_PrixVen  from f_artfourniss  inner join f_article on f_article.ar_ref = f_artfourniss.ar_ref where  f_artfourniss.ar_ref in (SELECT ar_ref FROM f_article WHERE FA_CodeFamille LIKE '%PSA%') order by AR_Ref
-
-  console.log("Mise a jour fournisseur principal éfféctué")
-  sql.close() // On ferme la connexion a la BDD
-
 }
 function uniqueRef(tabData,key){
   return [

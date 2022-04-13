@@ -10,7 +10,7 @@ async function RequiredDatas(){
     let pool = await sql.connect(sqlProperties) // Connexion à la BDD SQL Server
     console.log("SELECTION DES FOURNISSEURS")
 
-    var Datas = "SELECT  DISTINCT TOP(100)  \n"+
+    var Datas = "SELECT  DISTINCT top(10)  \n"+
     "[F_DOCLIGNE].[CT_Num],\n"+
     "[F_DOCLIGNE].DO_Piece,\n"+
     "[F_DOCLIGNE].DO_Ref,\n"+
@@ -55,6 +55,7 @@ async function RequiredDatas(){
         if (!PAYS.includes(element.LI_Pays))
             {PAYS.push(element.LI_Pays)}
 
+
         if(element.N_Expedition == 6)
         {
             element.N_Expedition="AVION"
@@ -97,8 +98,10 @@ async function RequiredDatas(){
             "MONTANT HT":element.DL_MontantHT
         })
     });
-    console.log(DATA[0])
+
+    
     GlobalArray.push(ResDatas.recordset,FOURNISSEUR.sort(),BC_ACHAT.sort(),DOC_CLIENT.sort(),REFERENCE.sort(),CLIENT.sort(),PAYS.sort(),DATA)
+    console.log(GlobalArray)
     return GlobalArray
 }
 module.exports = {RequiredDatas}

@@ -11,9 +11,9 @@
   <link rel="stylesheet" href="style/style.css">
   <script src="./js/header.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js" integrity="sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13" crossorigin="anonymous"></script>
-  <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.css">
-  <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.js"></script>
-  <script type="text/javascript" src="./js/datatables.js"></script>
+  <link rel="stylesheet" type="text/css" href="../extensions/Datatables/css/jquery.dataTables.css">
+  <script type="text/javascript" charset="utf8" src="../extensions/Datatables/js/jquery.dataTables.js"></script>
+  <script type="text/javascript" src="./js/magasin.js"></script>
 
 
 </head>
@@ -22,9 +22,9 @@
 </header>
 
 <body class="">
-  <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
-    TABLE DE CORRESPONDANCE PAYS
-  </button>
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+      TABLE DE CORRESPONDANCE PAYS
+    </button>
   
   <br>
   <br>
@@ -36,30 +36,41 @@
               <thead>
                 <tr>
                   <% if (i==1){%>
-                    <td><h4> FOURNISSEUR</h4> </td>
+                    <th> FOURNISSEUR</th>
                   <% }; %>
                   <% if (i==2){%>
-                    <td><h4> BC ACHAT </h4> </td>
+                    <th> BC ACHAT </th>
                   <% } %>
                   <% if (i==3){%>
-                    <td><h4>  DOC CLIENT</h4> </td>
+                    <th>  DOC CLIENT</th>
                   <% } %>
                   <% if (i==4){%>
-                    <td><h4> REFERENCE</h4> </td>
+                    <th> REFERENCE</th>
                   <% } %>
                   <% if (i==5){%>
-                    <td><h4> CLIENT</h4> </td>
+                    <th> CLIENT</th>
                   <% } %>
                   <% if (i==6){%>
-                    <td><h4> PAYS </h4> </td>
+                    <th> PAYS </th>
                   <% } %>
                 </tr>
               </thead>
               <tbody>
               <% for (var y=0; y<locals.datas[i].length; y++) { %>
-                <tr> 
-                  <td> <%= locals.datas[i][y] %> </td>
-                </tr> 
+                  <% if (i==2){%>
+                    <tr id="XMC"> 
+                      <td>
+                       <%= locals.datas[i][y] %> 
+                      </td>
+                    </tr> 
+                  <%}else{ %>             
+                    <tr>
+                      <td> 
+                        <%= locals.datas[i][y] %> 
+                      </td>
+                    </tr> 
+                  <% } %>
+
               <% } %>
               </tbody>  
             </table>
@@ -73,11 +84,11 @@
       </div>
     </div>
 
-      <table id="" class="display_Data cell-border ligne" style="width:100%">
+      <table id="" class="display_Data  cell-border ligne" style="width:100%">
         <thead>
           <tr>
           <% Object.keys(locals.datas[7][0]).forEach(function(element){ %>
-          <td><h6><%= element %></h4></td>
+          <th><%= element %></th>
           <% }) %> 
           </tr>
         </thead>
@@ -86,9 +97,9 @@
             <tr>
               <% Object.keys(locals.datas[7][i]).forEach(function(element){ %>
                 <% if (element == 'QTE RECUE'){ %>
-                  <td class="number"><input type="number" min="0" max="1000" value ="<%= locals.datas[7][i][element] %>"> </td>
+                  <td class="number" hidden><input type="number" min="0" max="1000" value ="<%= locals.datas[7][i][element] %>"> </td>
                 <% }else{ %>
-                  <td class=""><%= locals.datas[7][i][element] %></td>
+                  <td class="" hidden><%= locals.datas[7][i][element] %></td>
                 <% } %>
               <% }) %>
             </tr> 
@@ -103,12 +114,10 @@
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="exampleModalLabel">TABLE DE CORRESPONDANCE DES PAYS</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
         </button>
       </div>
       <div class="modal-body">
-        <table class="display_Data" id="modalTable">
+        <!-- <table class="display_Data" id="modalTable">
           <thead>
             <tr>
               <td><h3>PAYS</h3></td>
@@ -116,12 +125,13 @@
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td>COTE D'IVOIRE</td>
-              <td>ABJ</td>
-            </tr>
+            <% for (var z=0; z<locals.datas[6].length; z++) { %>
+              <tr> 
+                <td> <%= locals.datas[6][z] %> </td>
+              </tr> 
+            <% } %>
           </tbody>
-        </table>
+        </table> -->
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>

@@ -19,6 +19,7 @@ div.container_datatables {
   /* border: 4px solid #c31329; */
   border-radius: 18px;
   padding: 10px;
+  margin: 5px;
   box-shadow: 0 15px 60px rgba(0, 0, 0, 0.5);
 }
 .dataTables_wrapper.no-footer .dataTables_scrollBody {
@@ -76,12 +77,15 @@ td.number{
 div.container_datatables{
   padding-bottom:50px;
 }
+
 .buttons{
   display: flex;
   flex-direction: column;
-  width: 300px;
 }
+.modal-content{
+  border-radius: 10px;
 
+}
 #filters_buttons{
   display: flex;
 }
@@ -95,7 +99,7 @@ div.container_datatables{
 }
 .input_file + label {
   box-sizing: border-box;
-  border-radius: 10px;
+  border-radius: 25px;
   cursor: pointer; /* "hand" cursor */
 
 }
