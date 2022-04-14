@@ -22,7 +22,9 @@
       }
       .selected{
         background: black;
-
+      }
+      .test{
+        background-color: blue;
       }
       .testbox {
         display: flex;
@@ -72,6 +74,10 @@
       textarea {
         width: calc(100% - 12px);
         padding: 5px;
+      }
+      th{
+        text-align: center;
+
       }
       .item:hover p, .item:hover i, .question:hover p, .question label:hover, input:hover::placeholder {
         color: #a82877;

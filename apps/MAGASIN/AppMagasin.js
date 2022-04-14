@@ -6,102 +6,443 @@ const { info } = require('console');
 
 
 async function RequiredDatas(){
-    const sqlProperties = sqlConfig.dbConfig() // On récupère notre configuration SQL 
-    let pool = await sql.connect(sqlProperties) // Connexion à la BDD SQL Server
-    console.log("SELECTION DES FOURNISSEURS")
+    var GlobalArray = [
+        [
+          {
+            CT_Num: 'IAP',
+            DO_Piece: 'XMC186000',
+            DO_Ref: '96150',
+            AR_Ref: '39194188',
+            DL_Design: 'CEINTURE DE SECURITE ARG/ARD UN3268 FDS',
+            DO_Date: '04/09/21',
+            DL_PrixUnitaire: 122.66,
+            DL_MontantHT: 122.66,
+            DL_Qte: 1,
+            DL_QteBC: 1,
+            DL_Remise01REM_Valeur: 0,
+            V_CLINUM: 'KERN',
+            LI_Pays: 'MARTINIQUE',
+            N_Expedition: 'AVION',
+            DO_Coord01: 'N° 4022',
+            Remarque: 'RELANCE 01/04 / PAS DE DELAI '
+          },
+          {
+            CT_Num: 'AUTODOCGMBH',
+            DO_Piece: 'XMC186336',
+            DO_Ref: '96475',
+            AR_Ref: 'ESE38SKV521',
+            DL_Design: 'ESEN SKV Commutateur de colonne de direction',
+            DO_Date: '04/09/21',
+            DL_PrixUnitaire: 20.15,
+            DL_MontantHT: 20.15,
+            DL_Qte: 1,
+            DL_QteBC: 1,
+            DL_Remise01REM_Valeur: 0,
+            V_CLINUM: 'AUTOEQUIPMADA',
+            LI_Pays: 'MADAGASCAR',
+            N_Expedition: 'MIDEX ORLY',
+            DO_Coord01: '',
+            Remarque: 'RELANCE 13/03'
+          },
+          {
+            CT_Num: 'DUFFORTLESULIS',
+            DO_Piece: 'XMC188233',
+            DO_Ref: '98200',
+            AR_Ref: 'LR085485',
+            DL_Design: 'BUTEE AMORTISSEUR AR  N°5K570B ',
+            DO_Date: '01/11/21',
+            DL_PrixUnitaire: 42.9,
+            DL_MontantHT: 68.64,
+            DL_Qte: 2,
+            DL_QteBC: 2,
+            DL_Remise01REM_Valeur: 20,
+            V_CLINUM: 'BULIARDSN',
+            LI_Pays: 'MARTINIQUE',
+            N_Expedition: 'AVION',
+            DO_Coord01: '15547 ',
+            Remarque: 'RELIQUAT 02/04'
+          },
+          {
+            CT_Num: 'SIVAMTOYOTA',
+            DO_Piece: 'XMC188652',
+            DO_Ref: '98356',
+            AR_Ref: 'SU00305169',
+            DL_Design: 'ETIQUETTE',
+            DO_Date: '02/11/21',
+            DL_PrixUnitaire: 91.03,
+            DL_MontantHT: 79.2,
+            DL_Qte: 1,
+            DL_QteBC: 1,
+            DL_Remise01REM_Valeur: 13,
+            V_CLINUM: 'DALLEAU',
+            LI_Pays: 'REUNION',
+            N_Expedition: 'AVION',
+            DO_Coord01: '',
+            Remarque: 'RELANCE CLIENT 02/03'
+          },
+          {
+            CT_Num: 'FASTCARPARTS',
+            DO_Piece: 'XMC189500',
+            DO_Ref: '99261',
+            AR_Ref: '82110-86G00-000',
+            DL_Design: 'FERMETURE CAPOT',
+            DO_Date: '03/12/21',
+            DL_PrixUnitaire: 17,
+            DL_MontantHT: 17,
+            DL_Qte: 1,
+            DL_QteBC: 1,
+            DL_Remise01REM_Valeur: 0,
+            V_CLINUM: 'RAPIDOTO',
+            LI_Pays: 'MARTINIQUE',
+            N_Expedition: 'AVION',
+            DO_Coord01: '',
+            Remarque: '/ RELANCE 01.03 / DELAIS 04.04'
+          },
+          {
+            CT_Num: 'SIVAMTOYOTA',
+            DO_Piece: 'XMC189703',
+            DO_Ref: '99422',
+            AR_Ref: '5839902051',
+            DL_Design: 'COUVERCLE INF PLANCHER',
+            DO_Date: '02/12/21',
+            DL_PrixUnitaire: 366.71,
+            DL_MontantHT: 238.36,
+            DL_Qte: 1,
+            DL_QteBC: 1,
+            DL_Remise01REM_Valeur: 35,
+            V_CLINUM: 'CARROSSERIEJRC',
+            LI_Pays: 'GUADELOUPE',
+            N_Expedition: 'AVION',
+            DO_Coord01: '',
+            Remarque: 'DISPO LE 03/02 / RELANCE 01/04'
+          },
+          {
+            CT_Num: 'BRIEDESNATIONSREN',
+            DO_Piece: 'XMC190856',
+            DO_Ref: '100392',
+            AR_Ref: '8200928760',
+            DL_Design: 'TUYAU DETENDEUR COMPRESSEUR',
+            DO_Date: '02/12/21',
+            DL_PrixUnitaire: 186.19,
+            DL_MontantHT: 150.81,
+            DL_Qte: 1,
+            DL_QteBC: 1,
+            DL_Remise01REM_Valeur: 19,
+            V_CLINUM: 'ACS',
+            LI_Pays: 'GUADELOUPE',
+            N_Expedition: 'AVION',
+            DO_Coord01: 'DESTRIEZ ',
+            Remarque: 'RELANCE 04.04/ PAS DE DEL'
+          },
+          {
+            CT_Num: 'GUERSANT',
+            DO_Piece: 'XMC190903',
+            DO_Ref: '100460',
+            AR_Ref: 'MR485871',
+            DL_Design: 'RAIL --> 13.04',
+            DO_Date: '04/12/21',
+            DL_PrixUnitaire: 193.36,
+            DL_MontantHT: 145.02,
+            DL_Qte: 1,
+            DL_QteBC: 1,
+            DL_Remise01REM_Valeur: 25,
+            V_CLINUM: 'EXPRESSAUTO',
+            LI_Pays: 'GUADELOUPE',
+            N_Expedition: 'AVION',
+            DO_Coord01: 'N°986918',
+            Remarque: 'RELANCE 21.03 / delais 13.04'
+          },
+          {
+            CT_Num: 'BRIEDESNATIONSREN',
+            DO_Piece: 'XMC191258',
+            DO_Ref: '100764',
+            AR_Ref: '755100646R',
+            DL_Design: 'LONGERON AR D P-ASS',
+            DO_Date: '04/01/22',
+            DL_PrixUnitaire: 207.33,
+            DL_MontantHT: 138.91,
+            DL_Qte: 1,
+            DL_QteBC: 1,
+            DL_Remise01REM_Valeur: 33,
+            V_CLINUM: 'CBM',
+            LI_Pays: 'GUADELOUPE',
+            N_Expedition: 'AVION',
+            DO_Coord01: '',
+            Remarque: '2 ailes AR supprimées / jante ebay espage 95€ fret offert'
+          },
+          {
+            CT_Num: 'GGELESULIS',
+            DO_Piece: 'XMC191401',
+            DO_Ref: '100888',
+            AR_Ref: 'A20472008029D88',
+            DL_Design: 'CONTRE PORTES - PIECE NON DISPO PAS DE DELAI ANNONCE -',
+            DO_Date: '01/01/22',
+            DL_PrixUnitaire: 890.03,
+            DL_MontantHT: 694.22,
+            DL_Qte: 1,
+            DL_QteBC: 1,
+            DL_Remise01REM_Valeur: 22,
+            V_CLINUM: 'CONFIAC',
+            LI_Pays: 'GUADELOUPE',
+            N_Expedition: 'AVION',
+            DO_Coord01: '',
+            Remarque: 'RLC 01/03 PRV 08/03 AUX ULIS  RLC 23/03 PAS DE DELAI'
+          }
+        ],
+        [
+          'AUTODOCGMBH',
+          'BRIEDESNATIONSREN',
+          'DUFFORTLESULIS',
+          'FASTCARPARTS',
+          'GGELESULIS',
+          'GUERSANT',
+          'IAP',
+          'SIVAMTOYOTA'
+        ],
+        [
+          'XMC186000', 'XMC186336',
+          'XMC188233', 'XMC188652',
+          'XMC189500', 'XMC189703',
+          'XMC190856', 'XMC190903',
+          'XMC191258', 'XMC191401'
+        ],
+        [
+          '100392', '100460',
+          '100764', '100888',
+          '96150',  '96475',
+          '98200',  '98356',
+          '99261',  '99422'
+        ],
+        [
+          '39194188',
+          '5839902051',
+          '755100646R',
+          '8200928760',
+          '82110-86G00-000',
+          'A20472008029D88',
+          'ESE38SKV521',
+          'LR085485',
+          'MR485871',
+          'SU00305169'
+        ],
+        [
+          'ACS',
+          'AUTOEQUIPMADA',
+          'BULIARDSN',
+          'CARROSSERIEJRC',
+          'CBM',
+          'CONFIAC',
+          'DALLEAU',
+          'EXPRESSAUTO',
+          'KERN',
+          'RAPIDOTO'
+        ],
+        [ 'GUADELOUPE', 'MADAGASCAR', 'MARTINIQUE', 'REUNION' ],
+        [
+          {
+            DATE: '04/09/21',
+            'CDE ACH': 'XMC186000',
+            'CDE VT': '96150',
+            REFERENCE: '39194188',
+            'QTE COMMANDE': 1,
+            'QTE RECUE': 1,
+            DESIGNATION: 'CEINTURE DE SECURITE ARG/ARD UN3268 FDS',
+            PAYS: 'MARTINIQUE',
+            'MODE EXP': 'AVION',
+            CLIENT: 'KERN',
+            REMARQUE: 'RELANCE 01/04 / PAS DE DELAI ',
+            'IMMAT / INFO': 'A FAIRE',
+            'PRIX UNITAIRE': 122.66,
+            REMISE: 0,
+            'MONTANT HT': 122.66,
+            FOURNISSEUR: 'GGELESULIS'
 
-    var Datas = "SELECT  DISTINCT top(10)  \n"+
-    "[F_DOCLIGNE].[CT_Num],\n"+
-    "[F_DOCLIGNE].DO_Piece,\n"+
-    "[F_DOCLIGNE].DO_Ref,\n"+
-    "[F_DOCLIGNE].AR_Ref,\n"+
-    "[F_DOCLIGNE].DL_Design,\n"+
-    "[F_DOCLIGNE].DO_Date,\n"+
-    "[F_DOCLIGNE].DL_PrixUnitaire,\n"+
-    "[F_DOCLIGNE].DL_MontantHT,\n"+
-    "[F_DOCLIGNE].DL_Qte,\n"+
-    "[F_DOCLIGNE].DL_QteBC,\n"+
-    "[F_DOCLIGNE].DL_Remise01REM_Valeur,\n"+
-	"Ven.V_CLINUM,\n"+
-	"[F_LIVRAISON].LI_Pays,\n"+
-    "[F_LIVRAISON].N_Expedition,\n"+
-	"[F_DOCENTETE].DO_Coord01,\n"+
-    "[F_DOCENTETE].Remarque\n"+
-    "FROM [AUTO_EQUIP].[dbo].[F_DOCLIGNE] \n"+
-	    "JOIN (SELECT * FROM DP_VENTES where V_DOCTYPE=1) AS Ven ON F_DOCLIGNE.DO_Ref =Ven.V_DOCNUM \n"+
-		"JOIN F_LIVRAISON ON Ven.V_CLINUM = F_LIVRAISON.CT_Num\n"+
-		"JOIN F_DOCENTETE ON [F_DOCLIGNE].DO_Ref = F_DOCENTETE.DO_Piece\n"+
-    "WHERE [F_DOCLIGNE].DO_Domaine = '1' and [F_DOCENTETE].DO_Type = '1' and [F_DOCLIGNE].DO_Type = '12' AND [F_DOCLIGNE].DO_REF != '' order by DO_Piece"
-    var ResDatas= await pool.request().query(Datas);
-    var date ;
-    var GlobalArray = []
-    var FOURNISSEUR = [] , BC_ACHAT = [] , DOC_CLIENT = [], REFERENCE = [], CLIENT = [] ,PAYS = [];
-    var DATA = []
+          },
+          {
+            DATE: '04/09/21',
+            'CDE ACH': 'XMC186336',
+            'CDE VT': '96475',
+            REFERENCE: 'ESE38SKV521',
+            'QTE COMMANDE': 1,
+            'QTE RECUE': 1,
+            DESIGNATION: 'ESEN SKV Commutateur de colonne de direction',
+            PAYS: 'MADAGASCAR',
+            'MODE EXP': 'MIDEX ORLY',
+            CLIENT: 'AUTOEQUIPMADA',
+            REMARQUE: 'RELANCE 13/03',
+            'IMMAT / INFO': 'A FAIRE',
+            'PRIX UNITAIRE': 20.15,
+            REMISE: 0,
+            'MONTANT HT': 20.15,
+            FOURNISSEUR: 'AUTODOCGMBH'
 
-    ResDatas.recordset.forEach(element => {
-        element.LI_Pays=element.LI_Pays.toLowerCase()
-        element.LI_Pays=element.LI_Pays.toUpperCase().normalize("NFD").replace(/\p{Diacritic}/gu, "").replace(" FRANCAISE","")
-        if (!FOURNISSEUR.includes(element.CT_Num)) {
-            FOURNISSEUR.push(element.CT_Num)
-        }
-        if (!BC_ACHAT.includes(element.DO_Piece))
-            {BC_ACHAT.push(element.DO_Piece)}
-        if (!DOC_CLIENT.includes(element.DO_Ref))
-            {DOC_CLIENT.push(element.DO_Ref)}
-        if (!REFERENCE.includes(element.AR_Ref))
-            {REFERENCE.push(element.AR_Ref)}
-        if (!CLIENT.includes(element.V_CLINUM))
-            {CLIENT.push(element.V_CLINUM)}
-        if (!PAYS.includes(element.LI_Pays))
-            {PAYS.push(element.LI_Pays)}
+          },
+          {
+            DATE: '01/11/21',
+            'CDE ACH': 'XMC188233',
+            'CDE VT': '98200',
+            REFERENCE: 'LR085485',
+            'QTE COMMANDE': 2,
+            'QTE RECUE': 2,
+            DESIGNATION: 'BUTEE AMORTISSEUR AR  N°5K570B ',
+            PAYS: 'MARTINIQUE',
+            'MODE EXP': 'AVION',
+            CLIENT: 'BULIARDSN',
+            REMARQUE: 'RELIQUAT 02/04',
+            'IMMAT / INFO': 'A FAIRE',
+            'PRIX UNITAIRE': 42.9,
+            REMISE: 20,
+            'MONTANT HT': 68.64,
+            FOURNISSEUR: 'BRIEDESNATIONSREN'
 
+          },
+          {
+            DATE: '02/11/21',
+            'CDE ACH': 'XMC188652',
+            'CDE VT': '98356',
+            REFERENCE: 'SU00305169',
+            'QTE COMMANDE': 1,
+            'QTE RECUE': 1,
+            DESIGNATION: 'ETIQUETTE',
+            PAYS: 'REUNION',
+            'MODE EXP': 'AVION',
+            CLIENT: 'DALLEAU',
+            REMARQUE: 'RELANCE CLIENT 02/03',
+            'IMMAT / INFO': 'A FAIRE',
+            'PRIX UNITAIRE': 91.03,
+            REMISE: 13,
+            'MONTANT HT': 79.2,
+            FOURNISSEUR: 'DUFFORTLESULIS'
 
-        if(element.N_Expedition == 6)
-        {
-            element.N_Expedition="AVION"
-        }
-        if(element.N_Expedition == 3)
-        {
-            element.N_Expedition ="LIVRAISON FRAN"
-        }
-        if(element.N_Expedition == 4)
-        {
-            element.N_Expedition ="CHRONOPOST"
-        }
-        if(element.N_Expedition == 5)
-        {
-            element.N_Expedition ="MIDEX ORLY"
-        }
-        if(element.N_Expedition == 7)
-        {
-            element.N_Expedition ="BATEAU"
-        }
-
-        date = new Date(element.DO_Date)
-        var OutDate = checkTime(date.getUTCDay().toString()) + "/" +checkTime((date.getUTCMonth()+1).toString()) +"/" +date.getUTCFullYear().toString().slice(2)
-        element.DO_Date = OutDate
-        DATA.push({
-            "DATE":element.DO_Date,
-            "CDE ACH":element.DO_Piece,
-            "CDE VT":element.DO_Ref,
-            "REFERENCE":element.AR_Ref,
-            "QTE COMMANDE":element.DL_QteBC,
-            "QTE RECUE":element.DL_Qte,
-            "DESIGNATION":element.DL_Design,
-            "PAYS":element.LI_Pays,
-            "MODE EXP":element.N_Expedition,
-            "CLIENT":element.V_CLINUM,
-            "REMARQUE":element.Remarque,
-            "IMMAT / INFO":"A FAIRE",
-            "PRIX UNITAIRE":element.DL_PrixUnitaire,
-            "REMISE":element.DL_Remise01REM_Valeur,
-            "MONTANT HT":element.DL_MontantHT
-        })
-    });
-
-    
-    GlobalArray.push(ResDatas.recordset,FOURNISSEUR.sort(),BC_ACHAT.sort(),DOC_CLIENT.sort(),REFERENCE.sort(),CLIENT.sort(),PAYS.sort(),DATA)
-    console.log(GlobalArray)
+          },
+          {
+            DATE: '03/12/21',
+            'CDE ACH': 'XMC189500',
+            'CDE VT': '99261',
+            REFERENCE: '82110-86G00-000',
+            'QTE COMMANDE': 1,
+            'QTE RECUE': 1,
+            DESIGNATION: 'FERMETURE CAPOT',
+            PAYS: 'MARTINIQUE',
+            'MODE EXP': 'AVION',
+            CLIENT: 'RAPIDOTO',
+            REMARQUE: '/ RELANCE 01.03 / DELAIS 04.04',
+            'IMMAT / INFO': 'A FAIRE',
+            'PRIX UNITAIRE': 17,
+            REMISE: 0,
+            'MONTANT HT': 17,
+            FOURNISSEUR: 'FASTCARPARTS'
+          },
+          {
+            DATE: '02/12/21',
+            'CDE ACH': 'XMC189703',
+            'CDE VT': '99422',
+            REFERENCE: '5839902051',
+            'QTE COMMANDE': 1,
+            'QTE RECUE': 1,
+            DESIGNATION: 'COUVERCLE INF PLANCHER',
+            PAYS: 'GUADELOUPE',
+            'MODE EXP': 'AVION',
+            CLIENT: 'CARROSSERIEJRC',
+            REMARQUE: 'DISPO LE 03/02 / RELANCE 01/04',
+            'IMMAT / INFO': 'A FAIRE',
+            'PRIX UNITAIRE': 366.71,
+            REMISE: 35,
+            'MONTANT HT': 238.36,
+            FOURNISSEUR: 'GUERSANT'
+          },
+          {
+            DATE: '02/12/21',
+            'CDE ACH': 'XMC190856',
+            'CDE VT': '100392',
+            REFERENCE: '8200928760',
+            'QTE COMMANDE': 1,
+            'QTE RECUE': 1,
+            DESIGNATION: 'TUYAU DETENDEUR COMPRESSEUR',
+            PAYS: 'GUADELOUPE',
+            'MODE EXP': 'AVION',
+            CLIENT: 'ACS',
+            REMARQUE: 'RELANCE 04.04/ PAS DE DEL',
+            'IMMAT / INFO': 'A FAIRE',
+            'PRIX UNITAIRE': 186.19,
+            REMISE: 19,
+            'MONTANT HT': 150.81,
+            FOURNISSEUR:'IAP'
+          },
+          {
+            DATE: '04/12/21',
+            'CDE ACH': 'XMC190903',
+            'CDE VT': '100460',
+            REFERENCE: 'MR485871',
+            'QTE COMMANDE': 1,
+            'QTE RECUE': 1,
+            DESIGNATION: 'RAIL --> 13.04',
+            PAYS: 'GUADELOUPE',
+            'MODE EXP': 'AVION',
+            CLIENT: 'EXPRESSAUTO',
+            REMARQUE: 'RELANCE 21.03 / delais 13.04',
+            'IMMAT / INFO': 'A FAIRE',
+            'PRIX UNITAIRE': 193.36,
+            REMISE: 25,
+            'MONTANT HT': 145.02,
+            FOURNISSEUR:'SIVAMTOYOTA'
+          },
+          {
+            DATE: '04/01/22',
+            'CDE ACH': 'XMC191258',
+            'CDE VT': '100764',
+            REFERENCE: '755100646R',
+            'QTE COMMANDE': 1,
+            'QTE RECUE': 1,
+            DESIGNATION: 'LONGERON AR D P-ASS',
+            PAYS: 'GUADELOUPE',
+            'MODE EXP': 'AVION',
+            CLIENT: 'CBM',
+            REMARQUE: '2 ailes AR supprimées / jante ebay espage 95€ fret offert',
+            'IMMAT / INFO': 'A FAIRE',
+            'PRIX UNITAIRE': 207.33,
+            REMISE: 33,
+            'MONTANT HT': 138.91,
+            FOURNISSEUR:'SIVAMTOYOTA'
+          },
+          {
+            DATE: '01/01/22',
+            'CDE ACH': 'XMC191401',
+            'CDE VT': '100888',
+            REFERENCE: 'A20472008029D88',
+            'QTE COMMANDE': 1,
+            'QTE RECUE': 1,
+            DESIGNATION: 'CONTRE PORTES - PIECE NON DISPO PAS DE DELAI ANNONCE -',
+            PAYS: 'GUADELOUPE',
+            'MODE EXP': 'AVION',
+            CLIENT: 'CONFIAC',
+            REMARQUE: 'RLC 01/03 PRV 08/03 AUX ULIS  RLC 23/03 PAS DE DELAI',
+            'IMMAT / INFO': 'A FAIRE',
+            'PRIX UNITAIRE': 890.03,
+            REMISE: 22,
+            'MONTANT HT': 694.22,
+            FOURNISSEUR:'SIVAMTOYOTA'
+          },
+          {
+            DATE: '03/01/22',
+            'CDE ACH': 'XMC191401',
+            'CDE VT': '100888',
+            REFERENCE: 'TEST',
+            'QTE COMMANDE': 1,
+            'QTE RECUE': 1,
+            DESIGNATION: 'TEST',
+            PAYS: 'GUADELOUPE',
+            'MODE EXP': 'AVION',
+            CLIENT: 'CONFIAC',
+            REMARQUE: 'RLC 01/03 PRV 08/03 AUX ULIS  RLC 23/03 PAS DE DELAI',
+            'IMMAT / INFO': 'A FAIRE',
+            'PRIX UNITAIRE': 300,
+            REMISE: 22,
+            'MONTANT HT': 300,
+            FOURNISSEUR:'TEST'
+          }
+        ]
+      ]
     return GlobalArray
 }
 module.exports = {RequiredDatas}
