@@ -73,37 +73,42 @@ $(document).ready(function() {
                 })
             }           
         }
+        console.log(display.length)
         for (let y = 0; y < 6; y++) {
             $('#DataTables_Table_'+y+' > tbody > tr > td').each(function(){
                 if(y==0){if(display.find(o => o.FOURNISSEUR == $(this).text().trim())){
-                    $(this).parent().addClass('test')
-                    $('#DataTables_Table_'+y+' > tbody > tr:not(.test)').hide()
+                        $(this).parent().addClass('test')
+                        $('#DataTables_Table_'+y+' > tbody > tr:not(.test)').hide()
                     }
                 }
                 if(y==1){if(display.find(o => o["CDE ACHAT"] == $(this).text().trim())){
-                    $(this).parent().addClass('test')
-                    $('#DataTables_Table_'+y+' > tbody > tr:not(.test)').hide()
+                        $(this).parent().addClass('test')
+                        $('#DataTables_Table_'+y+' > tbody > tr:not(.test)').hide()
                     }
                 }
-                if(y==3){if(display.find(o => o["REFERENCE"] == $(this).text().trim())){
-                    $(this).parent().addClass('test')
-                    $('#DataTables_Table_'+y+' > tbody > tr:not(.test)').hide()
+                if(y==3){
+                    display.forEach(o =>{
+                        if(o["REFERENCE"] == $(this).text().trim()){
+                            console.log(o["REFERENCE"],$(this).text().trim())
+                            $(this).parent().addClass('test')
+                            $('#DataTables_Table_'+y+' > tbody > tr:not(.test)').hide()
+                        }
+                        else{console.log(o["REFERENCE"],$(this).text().trim())
                     }
+                    })
                 }
                 if(y==4){if(display.filter(o => o["CLIENT"] == $(this).text().trim())){
-                    $(this).parent().addClass('test')
-                    $('#DataTables_Table_'+y+' > tbody > tr:not(.test)').hide()
+                        $(this).parent().addClass('test')
+                        $('#DataTables_Table_'+y+' > tbody > tr:not(.test)').hide()
                     }
                 }
                 if(y==5){if(display.find(o => o["PAYS"] == $(this).text().trim())){
-                    $(this).parent().addClass('test')
-                    $('#DataTables_Table_'+y+' > tbody > tr:not(.test)').hide()
+                        $(this).parent().addClass('test')
+                        $('#DataTables_Table_'+y+' > tbody > tr:not(.test)').hide()
                     }
                 }
-
-            })
+            })    
         }
-        console.log(display)
     })
 
     $('#DataTables_Table_3 > tbody > tr > td').click(function(){

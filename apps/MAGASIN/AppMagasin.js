@@ -155,8 +155,8 @@ async function RequiredDatas(){
           {
             CT_Num: 'BRIEDESNATIONSREN',
             DO_Piece: 'XMC191258',
-            DO_Ref: '100764',
-            AR_Ref: '755100646R',
+            DO_Ref: '100888',
+            AR_Ref: 'A20472008029D88',
             DL_Design: 'LONGERON AR D P-ASS',
             DO_Date: '04/01/22',
             DL_PrixUnitaire: 207.33,
