@@ -6,9 +6,7 @@ const bodyParser = require("body-parser");
 const ImportSQL = require('./apps/IMPORTS/main.js')
 const session = require('express-session')
 const AppMagasin = require('./apps/MAGASIN/AppMagasin.js')
-
-
-
+const TypeFacturation = require('./apps/MAGASIN/getTransfType.js')
 
 var path = require('path');
 const { Console } = require('console');
@@ -143,9 +141,10 @@ app.post('/imports', (req,res) =>
         res.status(500).send(err);
     }
 })
-app.post('/magasin', (req,res) =>{
-    
-
+app.post('/magasin', async (req,res) =>{
+    TypeFacturation.typeTransf(req.body.Fournisseur).then(facType =>{
+        res.send(Object.values(facType))
+    })
 
 })
 app.listen(port, () => {

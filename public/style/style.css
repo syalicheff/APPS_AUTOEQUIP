@@ -1,9 +1,4 @@
-html{
 
-}
-body{
-    padding-top: 10px;
-}
 .ligne{
   display: inline-table;
 }
@@ -105,9 +100,7 @@ div.container_datatables{
 }
 div.modal-body > table{  margin:5px;}
 div.modal-body{
-  display: flex;
-  justify-content: center;
-
+  text-align: center;
 
 }
 .btn{
@@ -119,14 +112,44 @@ div.modal-body{
   border:1px solid black;
   text-align: center;
 }
+td.sorting_1{
+  display: flex;
+  justify-content: space-around;
+
+}
+td.sorting_1 > input[type=checkbox]{
+  height: 30px;
+  width: 30px;
+
+}
 
 .vertical-line{
   border-left: 2px solid rgb(255, 255, 255);
   display: inline-block;
   height: 10px;
+}
+.headerButtons{
+  display: flex;
+  justify-content: space-between;
+  width: fit-content;
+  border-radius: 90%;
+}
+.headerButtonSelected{
+  background-color: #bb2d3b;
 
 }
-
+.headerButtons > button{
+ width: 200px;
+ height: 60px;
+ border-radius: 0%;
+}
+.modal-header {justify-content: center;
+  font-weight: bold;
+  color: #dc3545;
+}
+i{
+  color: rgb(137, 137, 137);
+}
 .input_file:focus + label,
 .inpu_file + label:hover {
   background-color: #dc3545;

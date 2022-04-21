@@ -134,7 +134,7 @@ module.exports.sqlModifOffi= async function (tabData,file,dernierFichier)
         "WHEN MATCHED THEN\n"+
       "UPDATE SET\n"+
 			  "Art.[FA_CodeFamille] = isNull(Imp.[FA_CodeFamille],Art.[FA_CodeFamille]),\n"+
-			  "Art.[MARQUE] = isNull(Imp.[MARQUE],Art.[MARQUE]), \n"+
+			  "Art.[MARQUE] = isNull(Imp.[MARQUE],Art.[MARQUE]),\n"+
 			  "Art.[GAMME] = isNull(Imp.[GAMME],Art.[GAMME]),\n"+
 			  "Art.[Correspondance ref 1] = isNull(Imp.[Correspondance ref 1],Art.[Correspondance ref 1]),\n"+
 			  "Art.[Correspondance ref 2] = isNull(Imp.[Correspondance ref 2],Art.[Correspondance ref 2]),\n"+
@@ -151,17 +151,17 @@ module.exports.sqlModifOffi= async function (tabData,file,dernierFichier)
 			  "Art.[AR_Contremarque] = isNull(Imp.[AR_Contremarque],Art.[AR_Contremarque]),\n"+
 			  "Art.[AR_Publie] = isNull(Imp.[AR_Publie],Art.[AR_Publie]),\n"+
 			  "Art.[AR_UnitePoids] = isNull(Imp.[AR_UnitePoids],Art.[AR_UnitePoids]),\n"+	  
-			  "Art.[AR_PrixVen] = \n"+	  
+			  "Art.[AR_PrixVen] =\n"+	  
 			  "case \n"+
 				"when Art.AR_PrixAch != Art.AR_PrixVen then Imp.AR_PrixVen else Art.[AR_PrixVen]\n"+
 			  "end,\n"+
 			  "Art.[AR_PrixAch] = \n"+
 			  "case \n"+
         "when Art.AR_PrixVen != Art.AR_PrixAch then Imp.AR_PrixAch else Art.[AR_PrixAch]\n"+ 
-			  "end,"
+			  "end,\n"+ 
         "Art.[Type Tarif] = case when Art.AR_PrixAch != Art.AR_PrixVen then Imp.[Type Tarif] else Art.[Type Tarif] end;\n"
       let resMajsArticles = await pool.request().query(MajsArticles)
-      console.log(resMajsArticles)
+      //console.log(resMajsArticles)
     }
     if(tabData[0].DESIGNATIONMODIF == "OUI")
     {
@@ -197,11 +197,11 @@ module.exports.sqlModifOffi= async function (tabData,file,dernierFichier)
 			  "Art.[AR_PrixAch] = \n"+
 			  "case \n"+
         "when Art.AR_PrixVen != Art.AR_PrixAch then Imp.AR_PrixAch else Art.[AR_PrixAch]\n"+ 
-			  "end,"
+			  "end,\n"+ 
         "Art.[Type Tarif] = case when Art.AR_PrixAch != Art.AR_PrixVen then Imp.[Type Tarif] else Art.[Type Tarif] end;\n"
 
       let resMajsArticles = await pool.request().query(MajsArticles)
-      console.log(resMajsArticles)
+      //console.log(resMajsArticles)
     }
     //ON VIDE ENSUITE NOTRE TABLE TAMPON
     log=log+"SUPPRESSION DES DONNES TABLE IMPORT\n"

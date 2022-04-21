@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="fr">
 
 <head>        
   <meta charset="UTF-8">
@@ -21,128 +21,182 @@
     <%- include('../partials/header'); %>
 </header>
 
-<body class="">
-    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
-      TABLE DE CORRESPONDANCE PAYS
+<body>
+  <div class="headerButtons" >
+    <button type="button" class="btn btn-primary btn-danger" id="cmd">
+      Commandes
     </button>
-  
-  <br>
-  <br>
-    <div id = "filters_buttons">
-      <div class="container_datatables">
-        <% if (locals.datas){  %>
-          <% for (var i=1; i<locals.datas.length -1; i++) { %>
-            <table id="" class="display cell-border ligne" style="width:100%">
+    <button type="button" class="btn btn-primary btn-danger" id="etq">
+      Etiquettes
+    </button>
+  </div>
+  <div id="Commandes"> 
+
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+          TABLE DE CORRESPONDANCE PAYS
+        </button>
+      
+      <br>
+      <br>
+        <div id = "filters_buttons">
+          <div class="container_datatables">
+            <% if (locals.datas){  %>
+              <% for (var i=1; i<locals.datas.length -1; i++) { %>
+                <table id="" class="display cell-border ligne" style="width:100%">
+                  <thead>
+                    <tr>
+                      <% if (i==1){%>
+                        <th> FOURNISSEUR</th>
+                      <% }; %>
+                      <% if (i==2){%>
+                        <th> BC ACHAT </th>
+                      <% } %>
+                      <% if (i==3){%>
+                        <th>  DOC CLIENT</th>
+                      <% } %>
+                      <% if (i==4){%>
+                        <th> REFERENCE</th>
+                      <% } %>
+                      <% if (i==5){%>
+                        <th> CLIENT</th>
+                      <% } %>
+                      <% if (i==6){%>
+                        <th> PAYS </th>
+                      <% } %>
+                    </tr>
+                  </thead>
+                  <tbody>
+                  <% for (var y=0; y<locals.datas[i].length; y++) { %>
+                      <% if (i==2){%>
+                        <tr> 
+                          <td>
+                          <label><%= locals.datas[i][y] %></label> <input name="XMCSELECT" type="checkbox" style="display: none;">
+                          </td>
+                        </tr>
+                      <%}else if (i==3){ %> 
+                        <tr> 
+                          <td>
+                          <label><%= locals.datas[i][y] %></label> <input name="DOCSELECT" type="checkbox" style="display: none;">
+                          </td>
+                        </tr>                      
+                      <%}else{ %>             
+                        <tr>
+                          <td> 
+                            <%= locals.datas[i][y] %> 
+                          </td>
+                        </tr> 
+                      <% } %>
+
+                  <% } %>
+                  </tbody>  
+                </table>
+              <% } %>
+          </div>
+          <div class="buttons">
+            <button id="" class="btn btn-danger">EFFACER LES FILTRES</button>
+            <button id="" class="btn btn-danger">ACTUALISER LES LISTES</button>
+            <button id="resetQTE" class="btn btn-danger">REINITIALISER QTE</button>
+            <button id="Transfo" type="button" class="btn btn-danger">TRANSFORMER</button>
+          </div>
+        </div>
+
+          <table id="" class="display_Data  cell-border " style="width:100%">
+            <thead>
+              <tr>
+              <% Object.keys(locals.datas[7][0]).forEach(function(element){ %>
+              <th><%= element %></th>
+              <% }) %> 
+              </tr>
+            </thead>
+            <tbody>
+              <% for(var i=1; i<locals.datas[7].length; i++){ %>
+                <tr hidden>
+                  <% Object.keys(locals.datas[7][i]).forEach(function(element){ %>
+                    <% if (element == 'QTE RECUE'){ %>
+                      <td class="number" ><input type="number" min="0" max="1000" value ="<%= locals.datas[7][i][element] %>"> </td>
+                    <% }else{ %>
+                      <td class=""><%= locals.datas[7][i][element] %></td>
+                    <% } %>
+                  <% }) %>
+                </tr> 
+              <% } %>
+            </tbody>
+          </table> 
+        <% } %>
+
+        <!-- Modal -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">TABLE DE CORRESPONDANCE DES PAYS</h5>
+            </button>
+          </div>
+          <div class="modal-body">
+            <!-- <table class="display_Data" id="modalTable">
               <thead>
                 <tr>
-                  <% if (i==1){%>
-                    <th> FOURNISSEUR</th>
-                  <% }; %>
-                  <% if (i==2){%>
-                    <th> BC ACHAT </th>
-                  <% } %>
-                  <% if (i==3){%>
-                    <th>  DOC CLIENT</th>
-                  <% } %>
-                  <% if (i==4){%>
-                    <th> REFERENCE</th>
-                  <% } %>
-                  <% if (i==5){%>
-                    <th> CLIENT</th>
-                  <% } %>
-                  <% if (i==6){%>
-                    <th> PAYS </th>
-                  <% } %>
+                  <td><h3>PAYS</h3></td>
+                  <td><h3>CODE AEROPORT</h3></td>
                 </tr>
               </thead>
               <tbody>
-              <% for (var y=0; y<locals.datas[i].length; y++) { %>
-                  <% if (i==2){%>
-                    <tr id="XMC"> 
-                      <td>
-                       <%= locals.datas[i][y] %> 
-                      </td>
-                    </tr> 
-                  <%}else{ %>             
-                    <tr>
-                      <td> 
-                        <%= locals.datas[i][y] %> 
-                      </td>
-                    </tr> 
-                  <% } %>
-
-              <% } %>
-              </tbody>  
-            </table>
-          <% } %>
-      </div>
-      <div class="buttons">
-        <button id="" class="btn btn-danger">EFFACER LES FILTRES</button>
-        <button id="" class="btn btn-danger">ACTUALISER LES LISTES</button>
-        <button id="resetQTE" class="btn btn-danger">REINITIALISER QTE</button>
-        <button id="" class="btn btn-danger">TRANSFORMER</button>
-      </div>
-    </div>
-
-      <table id="" class="display_Data  cell-border ligne" style="width:100%">
-        <thead>
-          <tr>
-          <% Object.keys(locals.datas[7][0]).forEach(function(element){ %>
-          <th><%= element %></th>
-          <% }) %> 
-          </tr>
-        </thead>
-        <tbody>
-          <% for(var i=1; i<locals.datas[7].length; i++){ %>
-            <tr hidden>
-              <% Object.keys(locals.datas[7][i]).forEach(function(element){ %>
-                <% if (element == 'QTE RECUE'){ %>
-                  <td class="number" ><input type="number" min="0" max="1000" value ="<%= locals.datas[7][i][element] %>"> </td>
-                <% }else{ %>
-                  <td class="" ><%= locals.datas[7][i][element] %></td>
+                <% for (var z=0; z<locals.datas[6].length; z++) { %>
+                  <tr> 
+                    <td> <%= locals.datas[6][z] %> </td>
+                  </tr> 
                 <% } %>
-              <% }) %>
-            </tr> 
-          <% } %>
-        </tbody>
-      </table> 
-    <% } %>
-
-    <!-- Modal -->
-<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">TABLE DE CORRESPONDANCE DES PAYS</h5>
-        </button>
-      </div>
-      <div class="modal-body">
-        <!-- <table class="display_Data" id="modalTable">
-          <thead>
-            <tr>
-              <td><h3>PAYS</h3></td>
-              <td><h3>CODE AEROPORT</h3></td>
-            </tr>
-          </thead>
-          <tbody>
-            <% for (var z=0; z<locals.datas[6].length; z++) { %>
-              <tr> 
-                <td> <%= locals.datas[6][z] %> </td>
-              </tr> 
-            <% } %>
-          </tbody>
-        </table> -->
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
-        <button type="button" class="btn btn-primary">Sauvegarder</button>
+              </tbody>
+            </table> -->
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+            <button type="button" class="btn btn-primary">Sauvegarder</button>
+          </div>
+        </div>
       </div>
     </div>
+
+    <div class="modal fade" id="modalTransform" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">TRANSFORMATION</h5>
+            </button>
+          </div>
+          <div class="modal-body">
+            <i>Indiquer vers quel type transformer ce(s) documents : </i>
+          <br>
+          <input type="radio" name="typeFac" id="radio_BL" value="BL">
+          <label for="bl">BL</label>
+
+          <input type="radio" name="typeFac" id="radio_FACTURE" value="FACTURE">      
+          <label for="facture">FACTURE</label>
+          <br> 
+          <label for="nFacture">N° de facture :  </label><input type="text" class="form-control" id="nFacture">
+          <br>
+          <label for="nFacture">Date :  </label><input type="date" class="form-control" id="datePicker">
+
+
+
+          </input>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+            <button type="button" class="btn btn-primary">Ok</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <footer>
+      <%- include('../partials/footer'); %>
+    </footer> 
   </div>
-</div>
-  <footer>
-    <%- include('../partials/footer'); %>
-  </footer> 
+  <div id ="Etiquettes">
+    
+  </div>
+
 </body>
 </html
 
