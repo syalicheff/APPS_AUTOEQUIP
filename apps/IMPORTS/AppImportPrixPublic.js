@@ -105,9 +105,9 @@ module.exports.sqlModifOffi = async function (tabData,file,dernierFichier){
     else if (tabData[3].SUPARTICLE == 'NON')
       {
         console.log("NON")
-        var SuppressionArticlesFournisseur = "DELETE FROM [dbo].[F_ARTFOURNISS] WHERE [CT_Num]="+"'"+ tabData[0].FOURNISSEUR+"' AND [AR_Ref] IN (SELECT [F_ARTICLE].[AR_Ref] FROM [F_ARTICLE] INNER JOIN [F_IMPORT] on [F_IMPORT].[MARQUE] = [F_ARTICLE].[MARQUE]   WHERE [dbo].[F_ARTICLE].[MARQUE] = [dbo].[F_IMPORT].[MARQUE])"
+        var SuppressionArticlesFournisseur = "DELETE FROM [dbo].[F_ARTFOURNISS] WHERE [CT_Num]="+"'"+ tabData[0].FOURNISSEUR+"' AND [AR_Ref] IN (SELECT [F_ARTICLE].[AR_Ref] FROM [F_ARTICLE] INNER JOIN [F_IMPORT] on [F_IMPORT].[MARQUE] = [F_ARTICLE].[MARQUE] WHERE [dbo].[F_ARTICLE].[MARQUE] = [dbo].[F_IMPORT].[MARQUE])"
         //console.log(SuppressionArticlesFournisseur)
-        //let resSuppressionArticlesFournisseur = await pool.request().query(SuppressionArticlesFournisseur)
+        let resSuppressionArticlesFournisseur = await pool.request().query(SuppressionArticlesFournisseur)
       }
     //Puis on importe nos données FOUNISSEUR
     log=log+"INSERTION DONNEES FOURNISSEUR\n"

@@ -1,0 +1,28 @@
+USE [AUTO_EQUIP]
+	/*** VIDES ***/
+select * from [F_DOCENTETE] 
+	where DO_Piece in('XMC198331')  and DO_Domaine = '1' and DO_Type = '12'
+
+select * from [F_DOCLIGNE] 
+	where DO_Piece in('XMC198331') and DO_Domaine = '1' and DO_Type = '12'
+
+
+/*** PLEINES ***/
+select * from [F_DOCENTETE] 
+	where DO_Piece in('XMC197399')  and DO_Domaine = '1' and DO_Type = '12'
+
+select * from [F_DOCLIGNE] 
+	where DO_Piece in('XMC197399') and DO_Domaine = '1' and DO_Type = '12'
+
+/*** APPLI OK ***/
+select * from [F_DOCENTETE] 
+	where DO_Piece in('XMC189703')  and DO_Domaine = '1' and DO_Type = '12'
+
+select * from [F_DOCLIGNE] 
+	where DO_Piece in('XMC189703') and DO_Domaine = '1' and DO_Type = '12'
+
+
+
+
+
+		

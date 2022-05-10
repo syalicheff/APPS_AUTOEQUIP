@@ -14,7 +14,7 @@ cron.schedule('30 21 * * 1-5', () => {
 });
 
 cron.schedule('0 23 * * 5', function(){
-   majPubliee()
+   majPubliee("deux")
 });
 
 console.log("APPLICATION D'IMPORTS LANCE")
@@ -53,13 +53,13 @@ async function Main (principal)
         var modif = await ImportPublic.sqlModifOffi(Object.values(tabData),file,dernierFichier)
       }
     }
-    if(principal !== 'Sans'){
-      if(principal.length >1){
-        fournisseurPrincipal("deux")
-      }
-      else{
-        fournisseurPrincipal(principal)
-      }
+  }
+  if(principal !== 'Sans'){
+    if(principal.length >1){
+      fournisseurPrincipal("deux")
+    }
+    else{
+      fournisseurPrincipal(principal)
     }
   }
 

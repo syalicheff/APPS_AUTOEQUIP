@@ -60,7 +60,6 @@ module.exports.extractData = function(path){
             }
         }
     }
-    console.log(tabData)
     return tabData    
 }   
 function FilterDatas(value,valDef){

@@ -32,7 +32,7 @@
   </div>
   <div id="Commandes"> 
 
-        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+        <button id="PAYS" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
           TABLE DE CORRESPONDANCE PAYS
         </button>
       
@@ -125,7 +125,7 @@
         <% } %>
 
         <!-- Modal -->
-    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal fade" id="exampleModal" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
       <div class="modal-dialog" role="document">
         <div class="modal-content">
           <div class="modal-header">
@@ -133,26 +133,25 @@
             </button>
           </div>
           <div class="modal-body">
-            <!-- <table class="display_Data" id="modalTable">
-              <thead>
-                <tr>
-                  <td><h3>PAYS</h3></td>
-                  <td><h3>CODE AEROPORT</h3></td>
-                </tr>
-              </thead>
-              <tbody>
-                <% for (var z=0; z<locals.datas[6].length; z++) { %>
-                  <tr> 
-                    <td> <%= locals.datas[6][z] %> </td>
-                  </tr> 
-                <% } %>
-              </tbody>
-            </table> -->
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
-            <button type="button" class="btn btn-primary">Sauvegarder</button>
-          </div>
+            <form id="formPays" method="post" action="/aeroPays">
+              <table id="paysAero">
+                <thead>
+                  <tr>
+                    <th>PAYS</th>
+                    <th>CODE AEROPORT</th>
+                  </tr>
+                </thead>
+                <tbody>
+                </tbody>
+              </table>
+
+              </div>
+              <div class="modal-footer">
+                <button id="NewPays" type="button" class="btn btn-danger">Nouvelle enregistrement</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+                <input type="submit" value="Sauvegarder" class="btn btn-primary"> 
+              </div>
+            </form>
         </div>
       </div>
     </div>
@@ -165,26 +164,28 @@
             </button>
           </div>
           <div class="modal-body">
+          <form id="transfo" method="POST" action="/transformer">
             <i>Indiquer vers quel type transformer ce(s) documents : </i>
-          <br>
-          <input type="radio" name="typeFac" id="radio_BL" value="BL">
-          <label for="bl">BL</label>
+            <br>
+            <input type="radio" name="typeFac" id="radio_BL" value="BL">
+            <label for="bl">BL</label>
 
-          <input type="radio" name="typeFac" id="radio_FACTURE" value="FACTURE">      
-          <label for="facture">FACTURE</label>
-          <br> 
-          <label for="nFacture">N° de facture :  </label><input type="text" class="form-control" id="nFacture">
-          <br>
-          <label for="nFacture">Date :  </label><input type="date" class="form-control" id="datePicker">
+            <input type="radio" name="typeFac" id="radio_FACTURE" value="FACTURE">      
+            <label for="facture">FACTURE</label>
+            <br> 
+            <label for="nFacture">N° de facture :  </label><input name="nFacture" type="text" class="form-control" id="nFacture">
+            <br>
+            <label for="nFacture">Date :  </label><input name="Date" type="date" class="form-control" id="datePicker">
 
 
 
-          </input>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
-            <button type="button" class="btn btn-primary">Ok</button>
-          </div>
+            </input>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+              <input type="submit" class="btn btn-primary"value="Transformer">
+            </div>
+          </form>
         </div>
       </div>
     </div>

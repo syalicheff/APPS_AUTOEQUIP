@@ -10,6 +10,10 @@ div.container_datatables {
   border: #c31324;
 
 }
+.Del{
+  background-image: url(../snippet/Sup.svg) ;
+  background-repeat: no-repeat;
+}
 .dataTables_wrapper {
   /* border: 4px solid #c31329; */
   border-radius: 18px;

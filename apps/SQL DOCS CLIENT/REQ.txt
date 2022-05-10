@@ -1,0 +1,62 @@
+/****** Script de la commande SelectTopNRows à partir de SSMS  ******/
+/******
+SELECT * FROM [AUTO_EQUIP].[dbo].[F_COMPTETMODELE] where ct_num in
+	(SELECT ct_num 
+	 FROM [AUTO_EQUIP].[dbo].[F_COMPTET] 
+	 where CT_Sommeil = 0 and CT_Pays = 'FRANCE' and ct_type = 0 and CM_Type = 0 )
+
+
+SELECT * FROM [AUTO_EQUIP].[dbo].[F_COMPTETMODELE] where ct_num in	
+	(SELECT ct_num 
+	 FROM [AUTO_EQUIP].[dbo].[F_COMPTET] 
+	 where CT_Sommeil = 0 and CT_Pays = 'FRANCE' and ct_type = 0 and CM_Type = 0 ) 
+
+
+SELECT CM_Modele FROM [AUTO_EQUIP].[dbo].[F_COMPTETMODELE] where ct_num in
+	(SELECT ct_num 
+	 FROM [AUTO_EQUIP].[dbo].[F_COMPTET] 
+	 where CT_Sommeil = 0 and CT_Pays = 'Réunion' and ct_type = 0 and CM_Type = 2 )  order by ct_num
+
+
+	 
+INSERT INTO [AUTO_EQUIP].[dbo].[F_COMPTETMODELE] (CT_Num,cm_type,CM_Creator,CM_Modele,CM_NbExemplaire,CM_TypeModele,CM_ServiceContact,CM_Email,CM_SendTous)
+	SELECT ct_num,4 as cm_type,1129270357 as CM_Creator , 'Q:\EXPLOITATION\INFOS\Mise en page SAGE 100c\DEVIS\DEVIS METROPOLE TTC ( sans référence ).bgc' as CM_Modele,
+	1 as CM_NbExemplaire , 0 as CM_TypeModele,33 as CM_ServiceContact,'' as CM_Email, 0 as CM_SendTous
+	FROM [AUTO_EQUIP].[dbo].[F_COMPTET] 
+	where CT_Sommeil = 0 and CT_Pays = 'FRANCE' and ct_type = 0
+
+UPDATE [AUTO_EQUIP].[dbo].[F_COMPTETMODELE] SET CM_Modele = 'Q:\EXPLOITATION\INFOS\Mise en page SAGE 100c\GUYANE\DOC VENTE GUYANE SANS REF.bgc' where cm_type in (0,1) and CM_Modele = 'Q:\EXPLOITATION\INFOS\Mise en page SAGE 100c\GUYANE\DOC VENTE FDF PTP AVEC REF.bgc'
+
+INSERT INTO [AUTO_EQUIP].[dbo].[F_COMPTETMODELE] (CT_Num,cm_type,CM_Creator,CM_Modele,CM_NbExemplaire,CM_TypeModele,CM_ServiceContact,CM_Email,CM_SendTous)
+	SELECT ct_num,10 as cm_type,1129270357 as CM_Creator , 'Q:\EXPLOITATION\INFOS\Mise en page SAGE 100c\REUNION\DOC VENTE REUNION.bgc' as CM_Modele,
+	1 as CM_NbExemplaire , 0 as CM_TypeModele,33 as CM_ServiceContact,'' as CM_Email, 0 as CM_SendTous
+	FROM [AUTO_EQUIP].[dbo].[F_COMPTET] 
+	where CT_Sommeil = 0 and CT_Pays = 'Réunion' and ct_type = 0
+
+	
+UPDATE [AUTO_EQUIP].[dbo].[F_COMPTETMODELE] SET CM_Modele = 'Q:\EXPLOITATION\INFOS\Mise en page SAGE 100c\REUNION\DOC VENTE REUNION SANS REF.bgc' where cm_type in (0,1) and CM_Modele = 'Q:\EXPLOITATION\INFOS\Mise en page SAGE 100c\REUNION\DOC VENTE REUNION.bgc '
+
+
+INSERT INTO [AUTO_EQUIP].[dbo].[F_COMPTETMODELE] (CT_Num,cm_type,CM_Creator,CM_Modele,CM_NbExemplaire,CM_TypeModele,CM_ServiceContact,CM_Email,CM_SendTous)
+	SELECT ct_num,10 as cm_type,1129270357 as CM_Creator , 'Q:\EXPLOITATION\INFOS\Mise en page SAGE 100c\POLYNESIE\Docs ventes clients finaux PPT.bgc' as CM_Modele,
+	1 as CM_NbExemplaire , 0 as CM_TypeModele,33 as CM_ServiceContact,'' as CM_Email, 0 as CM_SendTous
+	FROM [AUTO_EQUIP].[dbo].[F_COMPTET] 
+	where CT_Sommeil = 0 and CT_Pays = 'Polynésie française' and ct_type = 0
+	******/
+/******
+
+
+UPDATE [AUTO_EQUIP].[dbo].[F_COMPTETMODELE] 
+SET CM_Modele = 'Q:\EXPLOITATION\INFOS\Mise en page SAGE 100c\GUYANE\DOC VENTE GUYANE SANS REF.bgc' 
+where ct_num in
+	(SELECT ct_num 
+	 FROM [AUTO_EQUIP].[dbo].[F_COMPTET] 
+	 where CT_Sommeil = 0 and CT_Pays = 'Guyane française' and ct_type = 0 ) and cm_type in (0,1) 
+
+******/
+UPDATE [AUTO_EQUIP].[dbo].[F_COMPTETMODELE] 
+SET CM_Modele = 'Q:\EXPLOITATION\INFOS\Mise en page SAGE 100c\POLYNESIE\Docs ventes clients finaux PPT SANS REF.bgc' 
+where ct_num in
+	(SELECT ct_num 
+	 FROM [AUTO_EQUIP].[dbo].[F_COMPTET] 
+	 where CT_Sommeil = 0 and (CT_Pays = 'Polynésie Française') and ct_type = 0 ) and cm_type in (0,1) 	

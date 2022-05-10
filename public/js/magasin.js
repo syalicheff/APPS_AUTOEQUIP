@@ -1,5 +1,11 @@
 $(document).ready(function() {
     baseDOM()
+    //EVITER FERMETURE DE LA MODAL QUAND ON CLIQUE A L'EXTERIEUR
+    $("#exampleModal").modal({
+        backdrop: 'static',
+        keyboard: false
+    }); 
+    // Datatables 'display' Options
     $('table.display').DataTable({
         "scrollY":        "400px",
         "scrollCollapse": true,
@@ -9,6 +15,7 @@ $(document).ready(function() {
             url: 'https://cdn.datatables.net/plug-ins/1.11.5/i18n/fr-FR.json'
         }
     });
+    // Datatables 'display_Data' Options
     $('table.display_Data').DataTable({
         "scrollY":        "400px",
         "scrollCollapse": true,
@@ -20,10 +27,11 @@ $(document).ready(function() {
             url: 'https://cdn.datatables.net/plug-ins/1.11.5/i18n/fr-FR.json'
         }
     });
+    // Bouton reset QTE
     $('button#resetQTE').click(function() {
         $('#DataTables_Table_6 > tbody > tr:visible > td > input[type=number]').val("0");
     });
-    
+    // FETCH DES DONNEES DE LA PAGE 
     var tabData = $("#DataTables_Table_6 > tbody > tr").map(function(i, row) {
         const data = $('td', row);
         return {
@@ -45,6 +53,7 @@ $(document).ready(function() {
             "FOURNISSEUR":data.eq(15).text().trim()
         }
       }).get();
+    // FILTRES TABLEAU 
     $('#DataTables_Table_0 > tbody > tr > td').click(function(){
        
         var display_0 = []
@@ -263,30 +272,38 @@ $(document).ready(function() {
         })
         $('table.ligne > tbody > tr:not(.showPays)').hide()
     })
+    // FIN FILTRES TABLEAU 
+
+    // Reset filters
     $('#filters_buttons > div.buttons > button:nth-child(1)').click(function(){
         $('table.ligne > tbody > tr').each(function(){
             $(this).removeClass().show()
 
         })
         $('input[type=checkbox]').hide()
-
     })
+    // GESTION DE TRANSFORMATION
+    var postedData 
     $('#Transfo').click(function(){
         
-        var postedData = $("#DataTables_Table_6 > tbody > tr:visible").map(function(i, row) {
+        postedData = $("#DataTables_Table_6 > tbody > tr:visible").map(function(i, row) {
             const data = $('td', row);
             return {
                 "CDE ACH":data.eq(1).text().trim() ,
                 "CDE VT":data.eq(2).text().trim() ,
+                "REF":data.eq(3).text().trim(),
+                "QTECOMMANDE":data.eq(4).text().trim(),
+                "QTERECUE":data.eq(5).children().val(),        
                 "FOURNISSEUR":data.eq(15).text().trim()
             }
           }).get();
+          //console.log(postedData)
           if(typeof postedData[0] !=="undefined"){
             $('#modalTransform').addClass('show').removeAttr('aria-hidden').attr({
                 'aria-modal':'true',
                 'style':'display: block'
             });
-            $.when(getFactType(postedData[0].FOURNISSEUR)).done(function(modeFacturation){
+            $.when(getFactType(postedData[0].FOURNISSEUR,postedData)).done(function(modeFacturation){
                 modeFacturation = modeFacturation[0].MODE_FACTURATION
                 if(modeFacturation == 'FACTURE'){
                     $('#radio_FACTURE').prop("checked", true);
@@ -303,14 +320,50 @@ $(document).ready(function() {
            
           }
     });
-    $('#modalTransform > div > div > div.modal-footer > button.btn.btn-primary').click(function(){
-        $('#DataTables_Table_6 > tbody > tr:visible').each(function(){
-           console.log($(this).children('td:nth-child(-n+3)').text().trim())
-        })
+
+    // SHOW PAYS
+    $('#PAYS').click(function(){
+        $.when(getPaysAero()).done(function(tabPays){
+            for (let i = 0; i < tabPays.length; i++) {
+                $('#paysAero > tbody').append('<tr><td><input name="pays" id="pays_'+i+'" type="text" value="'+tabPays[i].PAYS+'" readonly="readonly"></td><td><input name"Aero" id="aero_'+i+'" type="text" value="'+tabPays[i].CODEAERO+'" readonly="readonly"></td><td><input type="image" src="/snippet/Sup.svg" height="28px" width="28px" Onclick="remove(this)" id="delPays" class"btn-danger"> </td> <td><button type="button" id="Modifier"> <img src="/snippet/Modifier.svg" height="28px" width="28px" ></button> </td></tr>'); 
+            }
+        });
     });
+    // NOUVEAU PAYS
+    $('#NewPays').click(function(){
+        $('#paysAero > tbody').append('<tr ><td><input name="pays" type="text"></td><td><input name"Aero" type="text"></td><td><img src="/snippet/Sup.svg" height="28px" width="28px" Onclick="remove(this)" id="delPays" class"btn-danger"> </td> <td><button type="button" id="Modifier"> <img src="/snippet/Modifier.svg" height="28px" width="28px"> </button> </td> </tr>'); 
+    })
+    // DEBLOQUER LE CHAMP INPUT QUAND ON CLICK SUR LE BOUTON
+    $(document).on("click","#Modifier",function(){ 
+        $(this).closest('tr').find('input[type=text]').attr("readonly", false); 
+    })
+    // SAUVEGARDE PAYS 
+    // $("#idForm").submit(function(e) {
+    //     e.preventDefault();
+    //     var form = $(this);
+    //     var actionUrl = form.attr('action');
+
+    //     $.ajax({
+    //         type: "POST",
+    //         url: actionUrl,
+    //         data: form.serialize(), // serializes the form's elements.
+    //         success: function(data)
+    //         {
+    //           alert(data); // show response from the php script.
+    //         }
+    //     })
+
+    // })
+
+    // VIDE TABLEAU QUAND QUITTE 
+    $('#exampleModal > div > div > div.modal-footer > button.btn.btn-secondary').click(function(){ 
+        $('#paysAero > tbody').empty();
+    })
+    //Hide Modal 
     $('#modalTransform > div > div > div.modal-footer > button.btn.btn-secondary').click(function(){
         $('#modalTransform').hide() 
     });
+    // NAVIGATION TRANSFORMATIONS  <--> Etiquettes 
     $('.headerButtons > button').click(function(){
         $('.headerButtons > button').removeClass('headerButtonSelected')
         $(this).addClass('headerButtonSelected')
@@ -328,6 +381,7 @@ $(document).ready(function() {
         }
     })
 })
+
     function filters(clicked,type,show){
         if(type == 'XMC'){
             $("#DataTables_Table_6 > tbody > tr > td:nth-child(2)").each(function(){
@@ -348,16 +402,28 @@ $(document).ready(function() {
             })
         }
     }
-    function getFactType(fournisseur) {
+    function getFactType(fournisseur,Datas) {
         return $.ajax({
-            url:"/magasin ",
+            url:"/getFactype",
             type:"POST",
             data:{
                 Fournisseur : fournisseur,
+                tabData : Datas
             }
         })
+     };
+    function getPaysAero() {
+        return $.ajax({
+            url:"/AeroPays",
+            type:"GET"
+        })
     };
+    // Onglet de base au chargement 
     function baseDOM() {
         $('div#Commandes').show()
         $('div#Etiquettes').hide()
+    }
+    function remove(el){
+        var element = el;
+        element.closest('tr').remove()
     }
