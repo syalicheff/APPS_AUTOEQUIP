@@ -14,6 +14,7 @@
   <link rel="stylesheet" type="text/css" href="../extensions/Datatables/css/jquery.dataTables.css">
   <script type="text/javascript" charset="utf8" src="../extensions/Datatables/js/jquery.dataTables.js"></script>
   <script type="text/javascript" src="./js/magasin.js"></script>
+  <script type="text/javascript" src="./js/etiquetteJQ.js"></script>
 
 
 </head>
@@ -30,6 +31,7 @@
       Etiquettes
     </button>
   </div>
+  <% if (locals.echec){ alert(locals.echec);  }%>
   <div id="Commandes"> 
 
         <button id="PAYS" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
@@ -195,6 +197,7 @@
     </footer> 
   </div>
   <div id ="Etiquettes">
+
     
   </div>
 

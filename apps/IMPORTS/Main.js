@@ -54,7 +54,9 @@ async function Main (principal)
       }
     }
   }
-  if(principal !== 'Sans'){
+  
+
+  if (typeof principal !=="undefined"){
     if(principal.length >1){
       fournisseurPrincipal("deux")
     }
@@ -158,7 +160,6 @@ async function majPubliee(){
   const sqlProperties = sqlConfig.dbConfig() // On récupère notre configuration SQL 
   let pool = await sql.connect(sqlProperties) // Connexion à la BDD SQL Server
   let MajPubliee = await pool.request().query("UPDATE F_ARTICLE SET AR_Publie = 0 WHERE AR_REF NOT IN (SELECT DISTINCT AR_REF FROM F_ARTFOURNISS)")
-
 }
 module.exports = {Main}
 const delay = ms => new Promise(res => setTimeout(res, ms));

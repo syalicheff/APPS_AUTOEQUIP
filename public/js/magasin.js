@@ -61,8 +61,10 @@ $(document).ready(function() {
 
         $('input[type=checkbox]').show()
 
+        $('table.ligne > tbody > tr').removeClass('showFourn').show()
+        $('#DataTables_Table_0 > tbody > tr').removeClass('selected').addClass('showFourn')
+
         $(this).parent().closest('tr').addClass('selected')
-        $('#DataTables_Table_0 > tbody >  tr:not(.selected)').hide()
         for (let i = 0; i < tabData.length; i++){
             if(tabData[i]["FOURNISSEUR"] == $(this).text().trim()){
                 display_0.push({
@@ -87,6 +89,8 @@ $(document).ready(function() {
         $('table.ligne > tbody > tr:not(.showFourn)').hide()
     })
     $("#DataTables_Table_1 > tbody > tr > td").click(function(event) {
+        $('input[type=checkbox]').show()
+
         if ($(event.target).is('input[type=checkbox]')) {
             if (!$(this).children('input[type=checkbox]').is(":checked")){
                 filters($(this).children('label').text().trim(),'XMC',false)
@@ -96,12 +100,13 @@ $(document).ready(function() {
             }
             return
         }
+
         var display_1 = []
-        $('#DataTables_Table_1 > tbody > tr > td').each(function(){
-            $(this).removeClass('selected')
-        })  
+
+        $('table.ligne > tbody > tr').removeClass('showXMC').show()
+        $('#DataTables_Table_1 > tbody > tr').removeClass('selected').addClass('showXMC')
+
         $(this).parent().closest('tr').addClass('selected')
-        //$('#DataTables_Table_1 > tbody >  tr:not(.selected)').hide()
         for (let i = 0; i < tabData.length; i++){
             if(tabData[i]["CDE ACH"] == $(this).children('label').text().trim()){
                 display_1.push({
@@ -126,6 +131,7 @@ $(document).ready(function() {
         $('table.ligne > tbody > tr:not(.showXMC)').hide()
     })
     $('#DataTables_Table_2 > tbody > tr > td').click(function(event){
+        $('input[type=checkbox]').show()
         if ($(event.target).is('input[type=checkbox]')) {
             if (!$(this).children('input[type=checkbox]').is(":checked")){
                 filters($(this).children('label').text().trim(),'DOC CLIENT',false)
@@ -139,11 +145,12 @@ $(document).ready(function() {
         }
         var display_2 = []
 
-        $('#DataTables_Table_2 > tbody > tr > td').each(function(){
-            $(this).removeClass('selected')
-        })  
+
+        $('table.ligne > tbody > tr').removeClass('showDOCVT').show()
+        $('#DataTables_Table_2 > tbody > tr').removeClass('selected').addClass('showDOCVT')
+
         $(this).parent().closest('tr').addClass('selected')
-        //$('#DataTables_Table_1 > tbody >  tr:not(.selected)').hide()
+
         for (let i = 0; i < tabData.length; i++){
             if(tabData[i]["CDE VT"] == $(this).children('label').text().trim()){
                 display_2.push({
@@ -174,13 +181,10 @@ $(document).ready(function() {
     $('#DataTables_Table_3 > tbody > tr > td').click(function(){
          
         var display_3 = []
-        var selected =$(this).text().trim()
+        $('table.ligne > tbody > tr').removeClass('showRef').show()
+        $('#DataTables_Table_3 > tbody > tr').removeClass('selected').addClass('showRef')
 
-        $('#DataTables_Table_3 > tbody > tr').each(function(){
-            $(this).removeClass('selected')
-        })  
         $(this).parent().closest('tr').addClass('selected')
-        $('#DataTables_Table_3 > tbody >  tr:not(.selected)').hide()
         for (let i = 0; i < tabData.length; i++){
             if(tabData[i]["REFERENCE"] == $(this).text().trim()){
                 display_3.push({
@@ -208,12 +212,10 @@ $(document).ready(function() {
          
         var display_4 = []
         var selected =$(this).text().trim()
+        $('table.ligne > tbody > tr').removeClass('showClient').show()
+        $('#DataTables_Table_4 > tbody > tr').removeClass('selected').addClass('showClient')
 
-        $('#DataTables_Table_4 > tbody > tr').each(function(){
-            $(this).removeClass('selected')
-        })  
         $(this).parent().closest('tr').addClass('selected')
-        $('#DataTables_Table_4 > tbody >  tr:not(.selected)').hide()
         for (let i = 0; i < tabData.length; i++){
             if(tabData[i]["CLIENT"] == $(this).text().trim()){
                 display_4.push({
@@ -240,15 +242,14 @@ $(document).ready(function() {
 
     })
     $('#DataTables_Table_5 > tbody > tr > td').click(function(){
-         
+      
         var display_5 = []
         var selected =$(this).text().trim()
+        
+        $('table.ligne > tbody > tr').removeClass('showPays').show()
+        $('#DataTables_Table_5 > tbody > tr').removeClass('selected').addClass('showPays')
 
-        $('#DataTables_Table_5 > tbody > tr').each(function(){
-            $(this).removeClass('selected')
-        })  
         $(this).parent().closest('tr').addClass('selected')
-        $('#DataTables_Table_5 > tbody >  tr:not(.selected)').hide()
         for (let i = 0; i < tabData.length; i++){
             if(tabData[i]["PAYS"] == $(this).text().trim()){
                 display_5.push({
@@ -281,6 +282,10 @@ $(document).ready(function() {
 
         })
         $('input[type=checkbox]').hide()
+        $("#DataTables_Table_6 > tbody > tr:visible").each(function(){
+            $(this).hide()
+
+        })
     })
     // GESTION DE TRANSFORMATION
     var postedData 
@@ -298,27 +303,63 @@ $(document).ready(function() {
             }
           }).get();
           //console.log(postedData)
-          if(typeof postedData[0] !=="undefined"){
-            $('#modalTransform').addClass('show').removeAttr('aria-hidden').attr({
-                'aria-modal':'true',
-                'style':'display: block'
-            });
-            $.when(getFactType(postedData[0].FOURNISSEUR,postedData)).done(function(modeFacturation){
-                modeFacturation = modeFacturation[0].MODE_FACTURATION
-                if(modeFacturation == 'FACTURE'){
-                    $('#radio_FACTURE').prop("checked", true);
-                }
-                else if (modeFacturation == 'BL'){
-                    $('#radio_BL').prop("checked", true)
-                }
-            });
+          var test = postedData[0].FOURNISSEUR 
+          var multiRef = false
+          for (let i = 0; i <  postedData.length; i++) {
+              if(postedData[i].FOURNISSEUR != test){
+                 multiRef = true
+                 break
+              } 
           }
-          else{
-           
-            alert('Aucune ligne a transformer ! ')
-            //$('#modalTransform').hide()
-           
-          }
+        if(multiRef == true){
+            if(confirm('!!! TRANSFORMATION MULTI FOURNISSEUR CONTINUER ?') ){
+                if(typeof postedData[0] !=="undefined"){
+                    $('#modalTransform').addClass('show').removeAttr('aria-hidden').attr({
+                        'aria-modal':'true',
+                        'style':'display: block'
+                    });
+
+                    $.when(getFactType(postedData[0].FOURNISSEUR,postedData)).done(function(modeFacturation){
+                        modeFacturation = modeFacturation[0].MODE_FACTURATION
+                        if(modeFacturation == 'FACTURE'){
+                            $('#radio_FACTURE').prop("checked", true);
+                        }
+                        else if (modeFacturation == 'BL'){
+                            $('#radio_BL').prop("checked", true)
+                        }
+                    });
+                }
+                else{
+                    alert('Aucune ligne a transformer ! ')
+                    $('#modalTransform').hide()
+                }
+            }
+            else{
+                $('#modalTransform').hide();
+            }
+        }
+        else{
+            if(typeof postedData[0] !=="undefined"){
+                $('#modalTransform').addClass('show').removeAttr('aria-hidden').attr({
+                    'aria-modal':'true',
+                    'style':'display: block'
+                });
+
+                $.when(getFactType(postedData[0].FOURNISSEUR,postedData)).done(function(modeFacturation){
+                    modeFacturation = modeFacturation[0].MODE_FACTURATION
+                    if(modeFacturation == 'FACTURE'){
+                        $('#radio_FACTURE').prop("checked", true);
+                    }
+                    else if (modeFacturation == 'BL'){
+                        $('#radio_BL').prop("checked", true)
+                    }
+                });
+            }
+            else{
+                alert('Aucune ligne a transformer ! ')
+                //$('#modalTransform').hide()
+            }
+        }
     });
 
     // SHOW PAYS
@@ -364,22 +405,7 @@ $(document).ready(function() {
         $('#modalTransform').hide() 
     });
     // NAVIGATION TRANSFORMATIONS  <--> Etiquettes 
-    $('.headerButtons > button').click(function(){
-        $('.headerButtons > button').removeClass('headerButtonSelected')
-        $(this).addClass('headerButtonSelected')
 
-        if($(this).attr('id') == 'cmd'){
-            $('div#Commandes').show()
-            $('div#Etiquettes').hide()
-            $('button#resetQTE').show()
-
-        }
-        else if ($(this).attr('id') == 'etq'){
-            $('div#Commandes').hide()
-            $('div#Etiquettes').show()
-            $('button#resetQTE').hide()
-        }
-    })
 })
 
     function filters(clicked,type,show){

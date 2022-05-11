@@ -8,6 +8,7 @@ const session = require('express-session')
 const AppMagasin = require('../apps/MAGASIN/AppMagasin.js')
 const TypeFacturation = require('../apps/MAGASIN/getTransfType.js')
 const sqlConfig = require('../apps/MAGASIN/database.js')
+const etq = require('../apps/MAGASIN/ImpEtiquettes.js')
 var path = require('path');
 
 const mongoose = require('mongoose');
@@ -51,6 +52,11 @@ app.get('/magasin',  async (req, res) => {
             });
         })
 });
+app.get('/etq',  async (req, res) => {  
+    var test = await etq.ImpETQ()
+     res.send(test)
+});
+
 app.post('/golda', async (req,res) => 
 {
 	try 
@@ -171,18 +177,20 @@ app.post('/AeroPays', async (req,res) =>{
 
 app.post('/transformer',  async (req, res) => {  
     console.log(req.body)
-    AppMagasin.Transformer(req.body,transfoData)
-    await res.send('Done')
-
-    // AppMagasin.RequiredDatas().then(Data =>{
-    //     res.render('pages/magasin',
-    //     {
-    //         datas: Object.values(Data),
-    //     });
-    // })
-});
-
-
+    AppMagasin.Transformer(req.body,transfoData).then(
+        AppMagasin.RequiredDatas().then(Data =>{
+            
+        })
+        ,
+        AppMagasin.RequiredDatas().then(Data =>{
+            res.render('pages/magasin',
+            {
+                datas: Object.values(Data),
+                echec:"Import échoué"
+            })
+        })
+    )
+})
 
 app.listen(port, () => {
     console.log('Server app listening on port ' + port);

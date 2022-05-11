@@ -94,10 +94,10 @@ async function RequiredDatas(){
             "QTE RECUE":element.DL_Qte,
             "DESIGNATION":element.DL_Design,
             "PAYS":element.LI_Pays,
-            "MODE EXP":element.N_Expedition,
+            "MODE EXP":element.V_EXPEDIT,
             "CLIENT":element.V_CLINUM,
             "REMARQUE":element.Remarque,
-            "IMMAT / INFO":"A FAIRE",
+            "IMMAT / INFO":element.DO_Coord01,
             "PRIX UNITAIRE":element.DL_PrixUnitaire,
             "REMISE":element.DL_Remise01REM_Valeur,
             "MONTANT HT":element.DL_MontantHT,
@@ -113,23 +113,34 @@ async function RequiredDatas(){
 }
 
 async function Transformer(options,postedDatas){
-    const sqlProperties = sqlConfig.dbConfig() // On récupère notre configuration SQL 
-    let pool = await sql.connect(sqlProperties) // Connexion à la BDD SQL Server
-    // FETCH DATAS MAJ QTE AVEC REF ET XMC ET QTE RECUE
-    // ATTENTION CHANGEMENT DE LETTRE DANS L'AUTOINCREMENTATION
-    
-    if(options.typeFac == "BL"){
-        var doType = 13
-        var idCol = 3
-    }else if (options.typeFac == "FACTURE"){ var doType = 16; var idCol = 6;}
+    // CONNEXION BDD
+        const sqlProperties = sqlConfig.dbConfig() 
+        let pool = await sql.connect(sqlProperties)
+
+    // TYPE DE TRANSFORMATION BL/FACTURE
+
+        var doType 
+        var idCol
+        if(options.typeFac == "BL"){
+            doType = 13
+            idCol = 3
+        }
+        else if (options.typeFac == "FACTURE"){
+            doType = 16;
+            idCol = 6;
+        }
+
+
+    // RECUPERATION DE L'INCREMENT ACTUEL
 
         var getMC ='USE [AUTO_EQUIP_TEST] select DC_Piece from F_DOCCURRENTPIECE WHERE DC_IdCol = '+idCol+' and DC_Domaine = 1'
         var resgetMC = await pool.request().query(getMC);
         let currentMC = resgetMC.recordset[0].DC_Piece
-
         var whereUpdate = await fetchQTE(postedDatas)
- 
-        
+
+
+    // CREATION D'UNE ENTETE POUR NOTRE BL / FACTURE
+
         var transfoEntete = "USE [AUTO_EQUIP_TEST]\n"+
         "UPDATE [F_DOCENTETE]\n"+
         "SET DO_Piece = '"+currentMC+"',\n"+
@@ -138,11 +149,12 @@ async function Transformer(options,postedDatas){
         "DO_Date =CONVERT (date, SYSDATETIME()),\n"+
         "DO_Ref= '"+options.nFacture+"'\n"+ 
         "where DO_Piece ='"+tabuniqueXMC[0]+"'"
+        await pool.request().query(transfoEntete);
+        console.log("TRANSFORMATION ENTETE")
 
-        console.log("reqTransfoEntete : ")
-        console.log(transfoEntete) 
 
-        //BOUCLE SUR LES XMC Pour MAJ
+    //BOUCLE SUR LES XMC Pour MAJ
+
         for (let i = 0; i < tabuniqueXMC.length; i++) {
             var transfoLigne = "USE [AUTO_EQUIP_TEST]\n"+
             "UPDATE [F_DOCLIGNE]\n"+ 
@@ -152,26 +164,34 @@ async function Transformer(options,postedDatas){
             "DL_PieceBC = '"+tabuniqueXMC[i]+"',\n"+
             "DO_Date =CONVERT (date, SYSDATETIME()) \n"+
             "where DO_Piece = '"+tabuniqueXMC[i]+"'";
-
-            console.log("reqTransfoLigne : ")
-            console.log(transfoLigne)    
+            await pool.request().query(transfoLigne); 
+            console.log("TRANSFO LIGNE : "+i)
         }
+
+
+    // SUPPRESSION DES BONS DE COMMANDE
+
         var SupRegl = " DELETE FROM [AUTO_EQUIP_TEST].[dbo].[F_DOCREGL] where DO_Type = 12 and do_domaine = 1 and do_piece in ("+whereUpdate+")"
-        var SupBCVIDE = "delete from F_DOCLIGNE where DO_Piece in ("+whereUpdate+") and DO_Domaine = '1' and DO_Type = '12'"
-        console.log("supFichier : ")
-        console.log(SupRegl)  
-        console.log(SupBCVIDE)    
-  
+        await pool.request().query(SupRegl)
+        console.log("SUP DES REGLEMENTS")
+        var SupBCVIDE = "delete from F_DOCENTETE where DO_Piece in ("+whereUpdate+") and DO_Domaine = '1' and DO_Type = '12'"
+        await pool.request().query(SupBCVIDE)
+        console.log("SUP DES LIGNES VIDES")
+
+
+    // INCREMENTATION MANUELLE 
+
         var incrementedMc = await IncrementDocs(options.typeFac,currentMC)   
         var reqIncrement = "USE [AUTO_EQUIP_TEST]\n"+
-        "UPDATE AUTO_EQUIP_TEST.dbo.F_DOCCURRENTPIECE SET DC_Piece = '"+incrementedMc+"' WHERE DC_IdCol = 3 and DC_Domaine = 1"
-        console.log("reqIncrement : ")
-        console.log(reqIncrement)
+        "UPDATE AUTO_EQUIP_TEST.dbo.F_DOCCURRENTPIECE SET DC_Piece = '"+incrementedMc+"' WHERE DC_IdCol = "+idCol+" and DC_Domaine = 1"
+        await pool.request().query(reqIncrement)
+        console.log("INCREMENTATION MANUELLE")
 
         
-        // select DC_Piece from AUTO_EQUIP_TEST.dbo.F_DOCCURRENTPIECE WHERE DC_IdCol = 3 and DC_Domaine = 1 
+    // FIN DE PROCESS 
 
-
+        console.log("TRANSFORMATION TERMINE")
+        
 }
 
 module.exports = {RequiredDatas,Transformer}
@@ -205,7 +225,8 @@ async function fetchQTE(postedDatas){
             }
             if(postedDatas[i]["QTERECUE"] != postedDatas[i]["QTECOMMANDE"])
             {
-                console.log("USE [AUTO_EQUIP_TEST] UPDATE [F_DOCLIGNE] SET DL_QteBL = "+ postedDatas[i]["QTERECUE"] +" WHERE DO_Piece= "+postedDatas[i]["CDE ACH"]+" AND AR_Ref="+postedDatas[i]["REF"]+" AND CT_Num="+postedDatas[i]["FOURNISSEUR"]+" AND DO_Domaine = '1'  AND DO_type = '12' ")
+                console.log("MajQte")
+                await pool.request().query("USE [AUTO_EQUIP_TEST] UPDATE [F_DOCLIGNE] SET DL_QteBL = '"+ postedDatas[i]["QTERECUE"] +"' WHERE DO_Piece= '"+postedDatas[i]["CDE ACH"]+"' AND AR_Ref='"+postedDatas[i]["REF"]+"' AND CT_Num='"+postedDatas[i]["FOURNISSEUR"]+"' AND DO_Domaine = 1  AND DO_type = 12 ")
                 //await pool.request().query("UPDATE [F_DOCLIGNE] SET DL_QteBL = "+ postedDatas[i]["QTERECUE"] +" WHERE DO_Piece= "+postedDatas[i]["CDE ACH"]+" AND AR_Ref="+postedDatas[i]["REF"]+" AND CT_Num="+postedDatas[i]["FOURNISSEUR"]+" AND DO_Domaine = '1'  AND DO_type = '12' ");
             }
         }
